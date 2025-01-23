@@ -15,6 +15,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.singnature.UserMenu.LoginFragment
 import com.example.singnature.UserMenu.UserFragment
@@ -41,25 +42,51 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // Initialize NavController
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
-        navController = navHostFragment.navController
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.wildlifeFragment, R.id.warningFragment, R.id.exploreFragment, R.id.userFragment)
-        )
-        binding.bottomNav.setupWithNavController(navController)
+        initNavController()
 
         initBottomNavBar()
     }
 
+    private fun initNavController() {
+        // Initialize NavController
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
+        navController = navHostFragment.navController
+
+        // Set top-level destinations for AppBarConfiguration
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.wildlifeFragment,
+                R.id.warningFragment,
+                R.id.exploreFragment,
+                R.id.userFragment)
+        )
+
+        // Setup BottomNavigationView
+        binding.bottomNav.setupWithNavController(navController)
+    }
+
     private fun initBottomNavBar() {
-        navController.addOnDestinationChangedListener{ _, destination, _ ->
-            if (destination.id == R.id.userFragment) {
-                if (!isUserLoggedIn()) {
-                    navController.navigate(R.id.loginFragment)
+        // Check if user is logged in for UserFragment
+        binding.bottomNav.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.userFragment -> {
+                    // Check if user is logged in
+                    if (isUserLoggedIn()) {
+                        navController.navigate(R.id.userFragment)
+                    } else {
+                        navController.navigate(R.id.loginFragment)
+                    }
+                    true
+                }
+                else -> {
+                    NavigationUI.onNavDestinationSelected(menuItem, navController)
                 }
             }
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
     private fun isUserLoggedIn() : Boolean {

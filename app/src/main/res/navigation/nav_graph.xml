@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/warningFragment"
-        android:name="com.example.singnature.WarningFragment"
+        android:name="com.example.singnature.WarningMenu.WarningFragment"
         android:label="Warning">
     </fragment>
 
     <fragment
         android:id="@+id/exploreFragment"
-        android:name="com.example.singnature.ExploreFragment"
+        android:name="com.example.singnature.ExploreMenu.ExploreFragment"
         android:label="Explore">
     </fragment>
 
     <fragment
         android:id="@+id/wildlifeFragment"
-        android:name="com.example.singnature.WildlifeFragment"
+        android:name="com.example.singnature.WildlifeMenu.WildlifeFragment"
         android:label="Wildlife">
     </fragment>
 
