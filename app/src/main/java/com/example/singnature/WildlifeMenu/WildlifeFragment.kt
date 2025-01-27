@@ -3,6 +3,7 @@ package com.example.singnature.WildlifeMenu
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -15,15 +16,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import com.example.singnature.imageSearch.ClassificationResponse
 import com.example.singnature.R
-import com.example.singnature.RetrofitClient
+import com.example.singnature.imageSearch.RetrofitClient
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,7 +62,23 @@ class WildlifeFragment : Fragment() {
         return view
     }
 
-    private fun openCamera() {
+    private fun checkAndRequestPermission() {
+        val cameraPermission = android.Manifest.permission.CAMERA
+
+        if (ContextCompat.checkSelfPermission(requireContext(), cameraPermission) != PackageManager.PERMISSION_GRANTED) {
+            // Request CAMERA permission
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(cameraPermission),
+                REQUEST_IMAGE_CAPTURE
+            )
+        } else {
+            // Permission already granted
+            openCameraInternal()
+        }
+    }
+
+    private fun openCameraInternal() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         activity?.let { context ->
             takePictureIntent.resolveActivity(context.packageManager)?.also {
@@ -82,6 +102,10 @@ class WildlifeFragment : Fragment() {
         }
     }
 
+    private fun openCamera() {
+        checkAndRequestPermission()
+    }
+
     private fun openGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(galleryIntent, REQUEST_SELECT_GALLERY)
@@ -89,8 +113,11 @@ class WildlifeFragment : Fragment() {
 
     @Throws(IOException::class)
     private fun createImageFile() : File {
-        val storageDir = activity?.getExternalFilesDir(null)
-        return File.createTempFile("JPEG_${System.currentTimeMillis()}_",".jpg")
+        val fileName = "JPEG_${System.currentTimeMillis()}_"
+        val storageDir = requireContext().cacheDir
+        return File.createTempFile(fileName,".jpg", storageDir).apply {
+            currentPhotoPath = absolutePath
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -116,6 +143,26 @@ class WildlifeFragment : Fragment() {
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                openCameraInternal()
+            } else {
+                Toast.makeText(
+                    context,
+                    "Camera permission is required to take pictures",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
     private fun uploadImageToServer(imageFile : File) {
         // Prepare the file part
         val requestBody = RequestBody.create("image/jpeg".toMediaTypeOrNull(), imageFile)
@@ -123,20 +170,42 @@ class WildlifeFragment : Fragment() {
 
         // Call the API
         val call = RetrofitClient.instance.uploadImage(filePart)
-        call.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        call.enqueue(object : Callback<ClassificationResponse> {
+            override fun onResponse(call: Call<ClassificationResponse>, response: Response<ClassificationResponse>) {
                 if (response.isSuccessful) {
-                    val responseBody = response.body()?.toString()
-                    Log.d("API Response", "Success: $responseBody")
-                    Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show()
+                    val result = response.body()
+                    Log.d("API Response", "Success: $result")
+
+                    if (result != null) {
+                        // Format the result
+                        val resultText = StringBuilder()
+                        resultText.append("Class: ${result.className}\n\n")
+                        resultText.append("Probabilities:\n")
+                        resultText.append("Apple: ${String.format("%.2f", result.probabilities.apple * 100)}%\n")
+                        resultText.append("Banana: ${String.format("%.2f", result.probabilities.banana * 100)}%\n")
+                        resultText.append("Mixed: ${String.format("%.2f", result.probabilities.mixed * 100)}%\n")
+                        resultText.append("Orange: ${String.format("%.2f", result.probabilities.orange * 100)}%")
+
+                        // Update TextView with the result
+                        requireActivity().runOnUiThread {
+                            val textResult = view?.findViewById<TextView>(R.id.text_result)
+                            textResult?.text = resultText.toString()
+                        }
+                    } else {
+                        Toast.makeText(context, "Invalid response received", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Log.e("API Response", "Failure: ${response.errorBody()?.string()}")
                     Toast.makeText(context, "Failed to upload image", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<ClassificationResponse>, t: Throwable) {
                 Log.e("API Response", "Error: ${t.message}")
+                requireActivity().runOnUiThread {
+                    val textResult = view?.findViewById<TextView>(R.id.text_result)
+                    textResult?.text = "Error: ${t.message}"
+                }
                 Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
@@ -159,5 +228,4 @@ class WildlifeFragment : Fragment() {
             tempFile.absolutePath
         }
     }
-
 }
