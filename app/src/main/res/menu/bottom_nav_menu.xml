@@ -9,7 +9,7 @@
         android:title="Explore"
         android:icon="@drawable/baseline_hiking_24"/>
     <item
-        android:id="@+id/wildlifeFragment"
+        android:id="@+id/wildlifeMapsFragment"
         android:title="Wildlife"
         android:icon="@drawable/paw"/>
     <item
