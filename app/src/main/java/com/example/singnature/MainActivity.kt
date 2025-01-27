@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         // Set top-level destinations for AppBarConfiguration
         val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.wildlifeFragment,
+            setOf(R.id.wildlifeMapsFragment,
                 R.id.warningFragment,
                 R.id.exploreFragment,
                 R.id.userFragment)
@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNav.setupWithNavController(navController)
     }
 
+    /*
     private fun initBottomNavBar() {
         // Check if user is logged in for UserFragment
         binding.bottomNav.setOnItemSelectedListener { menuItem ->
@@ -80,7 +81,19 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> {
                     NavigationUI.onNavDestinationSelected(menuItem, navController)
+                    true
                 }
+            }
+        }
+    }
+    */
+
+    private fun initBottomNavBar() {
+        binding.bottomNav.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.userFragment && !isUserLoggedIn()) {
+                navController.navigate(R.id.loginFragment)
             }
         }
     }
