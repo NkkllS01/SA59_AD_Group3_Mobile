@@ -22,6 +22,7 @@ android {
                 "MAPS_API_KEY" to (project.findProperty("MAPS_API_KEY") ?: "")
             )
         )
+
     }
     buildFeatures {
         viewBinding = true
@@ -61,4 +62,5 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("org.jline:jline:3.21.0")
 }
