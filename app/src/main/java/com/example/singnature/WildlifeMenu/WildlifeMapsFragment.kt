@@ -27,9 +27,13 @@ class WildlifeMapsFragment : Fragment() {
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
          */
-        val singapore = LatLng(1.3521, 103.8198)
-        googleMap.addMarker(MarkerOptions().position(singapore).title("Marker in Singapore"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(singapore))
+        val nus_iss = LatLng(1.29245, 103.77657)
+        googleMap.addMarker(MarkerOptions().position(nus_iss).title("Marker in NUS-ISS"))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nus_iss, 15f))
+
+        googleMap.uiSettings.isZoomControlsEnabled = true
+        googleMap.uiSettings.isCompassEnabled = true
+        googleMap.uiSettings.setAllGesturesEnabled(true)
     }
 
     override fun onCreateView(
