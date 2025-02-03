@@ -41,6 +41,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ExploreMenu.Achievement.AchievementActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".ExploreMenu.Achievement.BadgeActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".ExploreMenu.Achievement.Leaderboard.LeaderboardActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

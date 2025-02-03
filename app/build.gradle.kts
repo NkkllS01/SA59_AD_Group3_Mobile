@@ -28,6 +28,10 @@ android {
         viewBinding = true
         buildConfig = true
     }
+
+    viewBinding {
+        enable = true
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -63,4 +67,6 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("org.jline:jline:3.21.0")
+    implementation ("androidx.camera:camera-view:1.0.0-alpha08")
+    implementation ("androidx.camera:camera-camera2:1.0.0-alpha08")
 }

@@ -5,13 +5,29 @@
     android:layout_height="match_parent"
     tools:context=".ExploreMenu.ExploreFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- Camera preview -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Overlay text -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Explore Fragment"
         android:textColor="@color/black"
         android:textSize="30sp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_gravity="center" />
+
+    <!-- Button to trigger navigation to AchievementActivity -->
+    <Button
+        android:id="@+id/btnNavigateToAchievement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GAME"
+        android:layout_gravity="center"
+        android:layout_marginTop="150dp" />
 
 </FrameLayout>
