@@ -10,7 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.SearchView
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.activityViewModels
 import com.example.singnature.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -32,6 +34,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class WildlifeMapsFragment : Fragment() {
+
+    private val viewModel: WildlifeMapViewModel by activityViewModels()
 
     private var currentLocation: Location? = null
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -67,7 +71,15 @@ class WildlifeMapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         loadingLogo = view.findViewById(R.id.loadingLogo)
-        loadingLogo.visibility = View.VISIBLE
+        if (viewModel.hasLogoBeenShown) {
+            loadingLogo.visibility = View.GONE
+        } else {
+            loadingLogo.visibility = View.VISIBLE
+            view.postDelayed({
+                loadingLogo.visibility = View.GONE
+                viewModel.hasLogoBeenShown = true
+            }, 3000)
+        }
 
         mapFragment = childFragmentManager.findFragmentById(R.id.wildlifeMapsFragment) as SupportMapFragment
         mapFragment.view?.visibility = View.GONE
@@ -75,9 +87,7 @@ class WildlifeMapsFragment : Fragment() {
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            getCurrentLocationUser()
-        }, 2000)
+        getCurrentLocationUser()
     }
 
     private fun getCurrentLocationUser() {
@@ -112,6 +122,9 @@ class WildlifeMapsFragment : Fragment() {
         mapFragment?.getMapAsync(callback)
         loadingLogo.visibility = View.GONE
         mapFragment?.view?.visibility = View.VISIBLE
+
+        val searchView: SearchView = requireView().findViewById(R.id.search)
+        searchView.visibility = View.VISIBLE
     }
 
     override fun onRequestPermissionsResult(
