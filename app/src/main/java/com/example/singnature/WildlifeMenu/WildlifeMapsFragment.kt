@@ -4,6 +4,8 @@ import android.content.pm.PackageManager
 import android.location.Location
 import androidx.fragment.app.Fragment
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +24,12 @@ import retrofit2.Response
 import com.example.singnature.Network.sightingsApiService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.maps.android.clustering.ClusterManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class WildlifeMapsFragment : Fragment() {
 
@@ -30,6 +38,7 @@ class WildlifeMapsFragment : Fragment() {
     private val permissionCode = 1001
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var loadingLogo: ImageView
+    private lateinit var clusterManager: ClusterManager<Sightings>
 
     private val callback = OnMapReadyCallback { googleMap ->
         googleMap.uiSettings.isZoomControlsEnabled = true
@@ -43,7 +52,7 @@ class WildlifeMapsFragment : Fragment() {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
         } ?: println("WARNING: Location not available yet.")
 
-        fetchSightings(googleMap)
+        setupClusterManager(googleMap)
     }
 
     override fun onCreateView(
@@ -66,7 +75,9 @@ class WildlifeMapsFragment : Fragment() {
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        getCurrentLocationUser()
+        Handler(Looper.getMainLooper()).postDelayed({
+            getCurrentLocationUser()
+        }, 2000)
     }
 
     private fun getCurrentLocationUser() {
@@ -131,30 +142,53 @@ class WildlifeMapsFragment : Fragment() {
         }
     }
 
-    private fun fetchSightings(googleMap: GoogleMap) {
-        sightingsApiService.getActiveSightings().enqueue(object : Callback<List<Sightings>> {
-            override fun onResponse(call: Call<List<Sightings>>, response: Response<List<Sightings>>) {
+    private fun setupClusterManager(googleMap: GoogleMap) {
+        clusterManager = ClusterManager(requireContext(), googleMap)
+        clusterManager.renderer = CustomClusterRenderer(requireContext(), googleMap, clusterManager)
+
+        googleMap.setOnCameraIdleListener(clusterManager)
+        googleMap.setOnMarkerClickListener(clusterManager)
+
+        clusterManager.setOnClusterClickListener { cluster ->
+            val builder = LatLngBounds.Builder()
+
+            for (item in cluster.items) {
+                builder.include(item.position)
+            }
+
+            val bounds = builder.build()
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
+            true
+        }
+
+        clusterManager.setOnClusterItemClickListener { item ->
+            println("DEBUG: Individual item clicked: ${item.details}")
+            false
+        }
+
+        fetchSightings()
+    }
+
+    private fun fetchSightings() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = sightingsApiService.getActiveSightings().execute()
                 if (response.isSuccessful) {
                     response.body()?.let { sightings ->
-                        println("DEBUG: Received ${sightings.size} sightings from API")
-                        for (sighting in sightings) {
-                            val location = LatLng(sighting.latitude.toDouble(), sighting.longitude.toDouble())
-                            println("DEBUG: Adding marker at (${sighting.latitude}, ${sighting.longitude})")
-
-                            googleMap.addMarker(
-                                MarkerOptions().position(location).title(sighting.details ?: "Wildlife Sighting")
-                            )
+                        withContext(Dispatchers.Main) {
+                            clusterManager.clearItems()
+                            clusterManager.addItems(sightings)
+                            clusterManager.cluster()
+                            println("DEBUG: Added ${sightings.size} sightings to cluster")
                         }
                     }
                 } else {
                     println("ERROR: API call was unsuccessful. Response Code: ${response.code()}")
                 }
+            } catch (e: Exception) {
+                println("ERROR: Failed to fetch sightings - ${e.message}")
+                e.printStackTrace()
             }
-
-            override fun onFailure(call: Call<List<Sightings>>, t: Throwable) {
-                println("ERROR: Failed to fetch sightings - ${t.message}")
-                t.printStackTrace()
-            }
-        })
+        }
     }
 }
