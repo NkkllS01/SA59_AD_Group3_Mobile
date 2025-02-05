@@ -36,9 +36,10 @@ class WildlifeMapsFragment : Fragment() {
         googleMap.uiSettings.isCompassEnabled = true
         googleMap.uiSettings.setAllGesturesEnabled(true)
 
+        enableMyLocation(googleMap)
+
         currentLocation?.let {
             val latLng = LatLng(currentLocation!!.latitude, currentLocation!!.longitude)
-            googleMap.addMarker(MarkerOptions().position(latLng).title("Current Location"))
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
         } ?: println("WARNING: Location not available yet.")
 
@@ -108,12 +109,27 @@ class WildlifeMapsFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-            if (requestCode == permissionCode && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (requestCode == permissionCode && grantResults.isNotEmpty() &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getCurrentLocationUser()
             } else {
                 println("ERROR: Location permission denied")
             }
         }
+
+    private fun enableMyLocation(googleMap: GoogleMap) {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            googleMap.isMyLocationEnabled = true
+        } else {
+            requestPermissions(
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                permissionCode
+            )
+        }
+    }
 
     private fun fetchSightings(googleMap: GoogleMap) {
         sightingsApiService.getActiveSightings().enqueue(object : Callback<List<Sightings>> {
