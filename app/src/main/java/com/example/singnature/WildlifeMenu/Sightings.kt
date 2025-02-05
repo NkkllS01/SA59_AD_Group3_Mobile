@@ -17,11 +17,14 @@ data class Sightings (
     val latitude: Double,
     val longitude: Double,
     val status: String
-) /* : ClusterItem {
+) : ClusterItem {
     override fun getPosition(): LatLng {
         return LatLng(latitude, longitude)
     }
 
     override fun getTitle(): String = "Wildlife Sightings"
     override fun getSnippet(): String = ""
-} */
+    override fun getZIndex(): Float? {
+        return 1.0f
+    }
+}
