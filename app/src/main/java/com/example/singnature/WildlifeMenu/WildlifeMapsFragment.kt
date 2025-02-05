@@ -1,46 +1,46 @@
 package com.example.singnature.WildlifeMenu
 
+import android.content.pm.PackageManager
+import android.location.Location
 import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.singnature.Network.ApiClient
+import android.widget.ImageView
+import androidx.core.app.ActivityCompat
 import com.example.singnature.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapCapabilities
 import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.example.singnature.Network.sightingsApiService
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 class WildlifeMapsFragment : Fragment() {
 
-    private val callback = OnMapReadyCallback { googleMap ->
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
+    private var currentLocation: Location? = null
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private val permissionCode = 1001
+    private lateinit var mapFragment: SupportMapFragment
+    private lateinit var loadingLogo: ImageView
 
+    private val callback = OnMapReadyCallback { googleMap ->
         googleMap.uiSettings.isZoomControlsEnabled = true
         googleMap.uiSettings.isCompassEnabled = true
         googleMap.uiSettings.setAllGesturesEnabled(true)
 
-        val capabilities: MapCapabilities = googleMap.getMapCapabilities()
-
-        val nus_iss = LatLng(1.292385, 103.776643)
-        googleMap.addMarker(MarkerOptions().position(nus_iss).title("Marker in NUS-ISS"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nus_iss, 15f))
+        currentLocation?.let {
+            val latLng = LatLng(currentLocation!!.latitude, currentLocation!!.longitude)
+            googleMap.addMarker(MarkerOptions().position(latLng).title("Current Location"))
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+        } ?: println("WARNING: Location not available yet.")
 
         fetchSightings(googleMap)
     }
@@ -55,9 +55,65 @@ class WildlifeMapsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.wildlifeMapsFragment) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
+
+        loadingLogo = view.findViewById(R.id.loadingLogo)
+        loadingLogo.visibility = View.VISIBLE
+
+        mapFragment = childFragmentManager.findFragmentById(R.id.wildlifeMapsFragment) as SupportMapFragment
+        mapFragment.view?.visibility = View.GONE
+
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireActivity())
+
+        getCurrentLocationUser()
     }
+
+    private fun getCurrentLocationUser() {
+        if(ActivityCompat.checkSelfPermission(
+                requireContext(),android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                permissionCode)
+            return
+        }
+
+        fusedLocationProviderClient.getCurrentLocation(
+            com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY, null
+        ).addOnSuccessListener {
+            location ->
+            if(location != null) {
+                currentLocation = location
+                initMap()
+            } else {
+                println("ERROR: Could not retrieve location")
+            }
+        }
+    }
+
+    private fun initMap() {
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.wildlifeMapsFragment) as SupportMapFragment?
+        mapFragment?.getMapAsync(callback)
+        loadingLogo.visibility = View.GONE
+        mapFragment?.view?.visibility = View.VISIBLE
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            if (requestCode == permissionCode && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocationUser()
+            } else {
+                println("ERROR: Location permission denied")
+            }
+        }
 
     private fun fetchSightings(googleMap: GoogleMap) {
         sightingsApiService.getActiveSightings().enqueue(object : Callback<List<Sightings>> {
