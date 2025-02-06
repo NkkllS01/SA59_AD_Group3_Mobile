@@ -11,18 +11,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.example.singnature.Network.ApiClient
+import com.example.singnature.Network.speciesApiService
 import com.example.singnature.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import com.example.singnature.Network.sightingsApiService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -35,6 +35,7 @@ import kotlinx.coroutines.withContext
 
 class WildlifeMapsFragment : Fragment() {
 
+    private lateinit var searchView: SearchView
     private val viewModel: WildlifeMapViewModel by activityViewModels()
 
     private var currentLocation: Location? = null
@@ -88,6 +89,20 @@ class WildlifeMapsFragment : Fragment() {
             LocationServices.getFusedLocationProviderClient(requireActivity())
 
         getCurrentLocationUser()
+
+        searchView = view.findViewById(R.id.search)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    searchByKeyword(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
     }
 
     private fun getCurrentLocationUser() {
@@ -156,8 +171,12 @@ class WildlifeMapsFragment : Fragment() {
     }
 
     private fun setupClusterManager(googleMap: GoogleMap) {
-        clusterManager = ClusterManager(requireContext(), googleMap)
-        clusterManager.renderer = CustomClusterRenderer(requireContext(), googleMap, clusterManager)
+        if (!::clusterManager.isInitialized) {
+            clusterManager = ClusterManager(requireContext(), googleMap)
+            clusterManager.renderer = CustomClusterRenderer(requireContext(), googleMap, clusterManager)
+        } else {
+            clusterManager.clearItems()
+        }
 
         googleMap.setOnCameraIdleListener(clusterManager)
         googleMap.setOnMarkerClickListener(clusterManager)
@@ -204,4 +223,34 @@ class WildlifeMapsFragment : Fragment() {
             }
         }
     }
+
+    private fun searchByKeyword(keyword: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val speciesResponse = speciesApiService.searchSpeciesByKeyword(keyword).execute()
+                val sightingsResponse = sightingsApiService.searchSightingsByKeyword(keyword).execute()
+
+                if (speciesResponse.isSuccessful && sightingsResponse.isSuccessful) {
+                    val speciesList = speciesResponse.body() ?: emptyList()
+                    val sightingsList = sightingsResponse.body() ?: emptyList()
+
+                    withContext(Dispatchers.Main) {
+                        val action = WildlifeMapsFragmentDirections
+                            .actionWildlifeMapsFragmentToSearchResultsFragment(
+                                keyword,
+                                speciesList.toTypedArray(),
+                                sightingsList.toTypedArray()
+                            )
+                        findNavController().navigate(action)
+                    }
+                } else {
+                    println("ERROR: API call failed with response codes: Species ${speciesResponse.code()}, Sightings ${sightingsResponse.code()}")
+                }
+            } catch (e: Exception) {
+                println("ERROR: Failed to fetch search results - ${e.message}")
+                e.printStackTrace()
+            }
+        }
+    }
+
 }
