@@ -23,11 +23,13 @@ class SightingsSearchResultsAdapter (
 
         val imageView = view.findViewById<ImageView>(R.id.itemImage)
         val textView = view.findViewById<TextView>(R.id.itemText)
+        val reportByText = view.findViewById<TextView>(R.id.reportByText)
 
         val item = getItem(position)
 
         textView.text = item.specieName
         imageView.setImageResource(R.drawable.image_placeholder)
+        reportByText.text = "Reported by: ${item.userName}"
 
         return view
     }

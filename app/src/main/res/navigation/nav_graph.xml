@@ -24,15 +24,6 @@
         <action
             android:id="@+id/action_WildlifeMapsFragment_to_SearchResultsFragment"
             app:destination="@id/searchResultsFragment" >
-            <argument
-                android:name="searchKeyword"
-                app:argType="string" />
-            <argument
-                android:name="speciesList"
-                app:argType="com.example.singnature.WildlifeMenu.Species[]" />
-            <argument
-                android:name="sightingsList"
-                app:argType="com.example.singnature.WildlifeMenu.Sightings[]" />
         </action>
     </fragment>
 
@@ -64,15 +55,6 @@
         android:id="@+id/searchResultsFragment"
         android:name="com.example.singnature.WildlifeMenu.SearchResultsFragment"
         android:label="Search Results">
-        <argument
-            android:name="searchKeyword"
-            app:argType="string" />
-        <argument
-            android:name="speciesList"
-            app:argType="com.example.singnature.WildlifeMenu.Species[]" />
-        <argument
-            android:name="sightingsList"
-            app:argType="com.example.singnature.WildlifeMenu.Sightings[]" />
     </fragment>
 
 </navigation>
