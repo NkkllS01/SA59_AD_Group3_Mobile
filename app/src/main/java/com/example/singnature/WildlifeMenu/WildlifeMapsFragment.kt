@@ -9,6 +9,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
@@ -67,9 +68,20 @@ class WildlifeMapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_wildlife_maps, container, false)
-    }
+        // Inflate the layout for this fragment
+        val rootView = inflater.inflate(R.layout.fragment_wildlife_maps, container, false)
 
+        // Find the button in the layout
+        val btnSearch = rootView.findViewById<Button>(R.id.btnSearch)
+
+        // Set up an OnClickListener for the button
+        btnSearch.setOnClickListener {
+            // Use Navigation Component to navigate to SpeciesCategoryFragment
+            findNavController().navigate(R.id.action_wildlifeMapsFragment_to_speciesCategoryFragment)
+        }
+
+        return rootView
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

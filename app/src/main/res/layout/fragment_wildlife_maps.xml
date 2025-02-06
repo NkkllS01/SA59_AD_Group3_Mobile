@@ -55,6 +55,16 @@
             android:background="@drawable/bg_camera_search"
             android:contentDescription="Open Camera"
             android:visibility="gone" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to Species Category"
+        android:layout_below="@id/searchContainer"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true" />
+
 
     </RelativeLayout>
-</RelativeLayout>

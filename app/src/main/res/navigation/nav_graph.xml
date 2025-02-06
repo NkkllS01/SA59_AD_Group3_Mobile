@@ -27,6 +27,9 @@
             app:popUpTo="@id/wildlifeMapsFragment"
             app:popUpToInclusive="false" >
         </action>
+        <action
+            android:id="@+id/action_wildlifeMapsFragment_to_speciesCategoryFragment"
+            app:destination="@id/speciesCategoryFragment" />
     </fragment>
 
     <fragment
@@ -57,6 +60,39 @@
         android:id="@+id/searchResultsFragment"
         android:name="com.example.singnature.WildlifeMenu.SearchResultsFragment"
         android:label="Search Results">
+    </fragment>
+
+    <fragment
+        android:id="@+id/speciesCategoryFragment"
+        android:name="com.example.singnature.WildlifeMenu.SpeciesCategoryFragment"
+        android:label="Species Category">
+
+        <action
+            android:id="@+id/action_speciesCategoryFragment_to_speciesListFragment"
+            app:destination="@+id/speciesListFragment">
+            <argument
+                android:name="categoryName"
+                app:argType="string" />
+        </action>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/speciesListFragment"
+        android:name="com.example.singnature.WildlifeMenu.SpeciesListFragment"
+        android:label="Species List" >
+        <action
+            android:id="@+id/action_speciesListFragment_to_speciesDetailFragment"
+            app:destination="@+id/speciesDetailFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/speciesDetailFragment"
+        android:name="com.example.singnature.WildlifeMenu.SpeciesDetailFragment"
+        android:label="Species Details">
+        <argument
+            android:name="speciesId"
+            app:argType="integer" />
     </fragment>
 
 </navigation>
