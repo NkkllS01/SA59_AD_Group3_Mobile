@@ -23,7 +23,9 @@
         android:label="Wildlife">
         <action
             android:id="@+id/action_WildlifeMapsFragment_to_SearchResultsFragment"
-            app:destination="@id/searchResultsFragment" >
+            app:destination="@id/searchResultsFragment"
+            app:popUpTo="@id/wildlifeMapsFragment"
+            app:popUpToInclusive="false" >
         </action>
     </fragment>
 
