@@ -71,12 +71,9 @@ class WildlifeMapsFragment : Fragment() {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_wildlife_maps, container, false)
 
-        // Find the button in the layout
-        val btnSearch = rootView.findViewById<Button>(R.id.btnSearch)
+        val btnSearch = rootView.findViewById<Button>(R.id.btnView)
 
-        // Set up an OnClickListener for the button
         btnSearch.setOnClickListener {
-            // Use Navigation Component to navigate to SpeciesCategoryFragment
             findNavController().navigate(R.id.action_wildlifeMapsFragment_to_speciesCategoryFragment)
         }
 

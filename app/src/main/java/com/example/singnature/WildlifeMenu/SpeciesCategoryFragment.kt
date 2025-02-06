@@ -22,8 +22,8 @@ class SpeciesCategoryFragment : Fragment() {
 
         val categories = listOf(
             SpeciesCategory("Bees", R.drawable.image_placeholder),
-            SpeciesCategory("Butterflies", R.drawable.image_placeholder),
-            SpeciesCategory("Birds", R.drawable.image_placeholder)
+            SpeciesCategory("Monitor Lizards", R.drawable.image_placeholder),
+            SpeciesCategory("Mushrooms", R.drawable.image_placeholder)
         )
 
         val adapter = SpeciesCategoryAdapter(requireContext(), categories)

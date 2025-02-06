@@ -22,7 +22,6 @@
         android:scaleType="centerCrop"
         android:src="@drawable/image_placeholder" />
 
-
     <TextView
         android:id="@+id/speciesDescription"
         android:layout_width="wrap_content"
@@ -30,11 +29,21 @@
         android:text="Description goes here"
         android:paddingTop="4dp" />
 
-<TextView
+    <TextView
         android:id="@+id/speciesHighlight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Highlights" />
+
+    <!-- Progress Bar (hidden by default) -->
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:paddingTop="16dp" />
 
 </LinearLayout>

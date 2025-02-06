@@ -58,10 +58,10 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/btnSearch"
+        android:id="@+id/btnView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Go to Species Category"
+        android:text="Wildlife"
         android:layout_below="@id/searchContainer"
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true" />

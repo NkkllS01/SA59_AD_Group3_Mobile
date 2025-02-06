@@ -8,5 +8,8 @@ data class Species (
     val specieId: Int,
     val specieName: String,
     val description: String,
-    val highlights: String
+    val highlights: String,
+    val categoryId: Int?,
+    val categoryName: String?
+
 ): Parcelable
