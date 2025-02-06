@@ -36,6 +36,7 @@ import kotlinx.coroutines.withContext
 class WildlifeMapsFragment : Fragment() {
 
     private lateinit var searchView: SearchView
+    private lateinit var cameraIcon: ImageView
     private val viewModel: WildlifeMapViewModel by activityViewModels()
     private val searchViewModel: SearchViewModel by activityViewModels()
 
@@ -96,7 +97,9 @@ class WildlifeMapsFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
                     searchViewModel.searchByKeyword(it)
-                    findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SearchResultsFragment)
+                    if (findNavController().currentDestination?.id == R.id.wildlifeMapsFragment) {
+                        findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SearchResultsFragment)
+                    }
                 }
                 return true
             }
@@ -142,6 +145,8 @@ class WildlifeMapsFragment : Fragment() {
 
         val searchView: SearchView = requireView().findViewById(R.id.search)
         searchView.visibility = View.VISIBLE
+        val cameraIcon: ImageView = requireView().findViewById(R.id.cameraButton)
+        cameraIcon.visibility = View.VISIBLE
     }
 
     override fun onRequestPermissionsResult(
@@ -225,34 +230,5 @@ class WildlifeMapsFragment : Fragment() {
             }
         }
     }
-
-    /* private fun searchByKeyword(keyword: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val speciesResponse = speciesApiService.searchSpeciesByKeyword(keyword).execute()
-                val sightingsResponse = sightingsApiService.searchSightingsByKeyword(keyword).execute()
-
-                if (speciesResponse.isSuccessful && sightingsResponse.isSuccessful) {
-                    val speciesList = speciesResponse.body() ?: emptyList()
-                    val sightingsList = sightingsResponse.body() ?: emptyList()
-
-                    withContext(Dispatchers.Main) {
-                        val action = WildlifeMapsFragmentDirections
-                            .actionWildlifeMapsFragmentToSearchResultsFragment(
-                                keyword,
-                                speciesList.toTypedArray(),
-                                sightingsList.toTypedArray()
-                            )
-                        findNavController().navigate(action)
-                    }
-                } else {
-                    println("ERROR: API call failed with response codes: Species ${speciesResponse.code()}, Sightings ${sightingsResponse.code()}")
-                }
-            } catch (e: Exception) {
-                println("ERROR: Failed to fetch search results - ${e.message}")
-                e.printStackTrace()
-            }
-        }
-    } */
 
 }

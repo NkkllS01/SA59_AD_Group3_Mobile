@@ -20,7 +20,6 @@ class SearchViewModel : ViewModel() {
     val sightingsList: LiveData<List<Sightings>> get() = _sightingsList
 
     fun searchByKeyword(keyword: String) {
-        println("DEBUG: searchByKeyword called with keyword: $keyword")
 
         _searchKeyword.value = keyword
 

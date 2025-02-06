@@ -89,7 +89,28 @@ class MainActivity : AppCompatActivity() {
     */
 
     private fun initBottomNavBar() {
-        binding.bottomNav.setupWithNavController(navController)
+        binding.bottomNav.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.wildlifeMapsFragment -> {
+                    if (navController.currentDestination?.id != R.id.wildlifeMapsFragment) {
+                        navController.popBackStack(R.id.wildlifeMapsFragment, false)
+                    }
+                    true
+                }
+                R.id.userFragment -> {
+                    if (isUserLoggedIn()) {
+                        navController.navigate(R.id.userFragment)
+                    } else {
+                        navController.navigate(R.id.loginFragment)
+                    }
+                    true
+                }
+                else -> {
+                    NavigationUI.onNavDestinationSelected(menuItem, navController)
+                    true
+                }
+            }
+        }
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.userFragment && !isUserLoggedIn()) {

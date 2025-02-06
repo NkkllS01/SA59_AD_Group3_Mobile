@@ -37,7 +37,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@id/cameraButton"
-            android:layout_weight="1"
             android:queryHint="Search..."
             android:iconifiedByDefault="false"
             android:elevation="5dp"
@@ -54,6 +53,8 @@
             android:src="@drawable/camera_icon"
             android:scaleType="centerInside"
             android:background="@drawable/bg_camera_search"
-            android:contentDescription="Open Camera" />
+            android:contentDescription="Open Camera"
+            android:visibility="gone" />
+
     </RelativeLayout>
 </RelativeLayout>
