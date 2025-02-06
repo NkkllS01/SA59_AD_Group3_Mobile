@@ -32,8 +32,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Date
 
-class WildlifeMapsFragment : Fragment() {
+class WildlifeMapsFragment : Fragment(){
 
     private lateinit var searchView: SearchView
     private val viewModel: WildlifeMapViewModel by activityViewModels()
@@ -58,6 +59,10 @@ class WildlifeMapsFragment : Fragment() {
         } ?: println("WARNING: Location not available yet.")
 
         setupClusterManager(googleMap)
+
+        googleMap.setOnMapClickListener { latLng ->googleMap
+            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng), 500, null)
+        }
     }
 
     override fun onCreateView(
@@ -181,6 +186,8 @@ class WildlifeMapsFragment : Fragment() {
         googleMap.setOnCameraIdleListener(clusterManager)
         googleMap.setOnMarkerClickListener(clusterManager)
 
+        addSightingsMarkers(googleMap)
+
         clusterManager.setOnClusterClickListener { cluster ->
             val builder = LatLngBounds.Builder()
 
@@ -252,5 +259,55 @@ class WildlifeMapsFragment : Fragment() {
             }
         }
     }
+    private fun addSightingsMarkers(googleMap: GoogleMap) {
+        // 新加坡的经纬度范围
+        val singaporeBounds = LatLngBounds(
+            LatLng(1.2500, 103.5700), // 西南角
+            LatLng(1.4700, 104.1000)  // 东北角
+        )
 
+        // 创建 Sightings 对象的列表
+        val sightingsList = listOf(
+            Sightings(
+                sightingId = 1,
+                userId = 101,
+                userName = "Alice",
+                date = Date(),
+                specieId = 201,
+                specieName = "Lion",
+                details = "Spotted near the river",
+                imageUrl = "http://example.com/lion.jpg",
+                latitude = 1.3521,  // 新加坡的经纬度示例
+                longitude = 103.8198,
+                status = "Active"
+            ),
+            Sightings(
+                sightingId = 2,
+                userId = 102,
+                userName = "Bob",
+                date = Date(),
+                specieId = 202,
+                specieName = "Elephant",
+                details = "Feeding on grass",
+                imageUrl = "http://example.com/elephant.jpg",
+                latitude = 1.2900,  // 新加坡的经纬度示例
+                longitude = 103.8500,
+                status = "Active"
+            ),
+            // 添加其他 Sightings 对象，确保它们在新加坡范围内
+        )
+
+        // 清空现有的标记（如果需要）
+        clusterManager.clearItems()
+
+        // 将 Sightings 对象添加到 ClusterManager
+        sightingsList.forEach { sighting ->
+            if (singaporeBounds.contains(sighting.getPosition())) {
+                clusterManager.addItem(sighting)
+            }
+        }
+
+        // 刷新聚类
+        clusterManager.cluster()
+    }
 }
