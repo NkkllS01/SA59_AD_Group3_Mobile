@@ -5,8 +5,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Species (
-    val SpecieId: Int,
-    val SpecieName: String,
-    val Description: String,
-    val Highlights: String
+    val specieId: Int,
+    val specieName: String,
+    val description: String,
+    val highlights: String
 ): Parcelable

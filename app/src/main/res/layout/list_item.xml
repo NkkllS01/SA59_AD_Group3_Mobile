@@ -7,17 +7,38 @@
 
     <ImageView
         android:id="@+id/itemImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:scaleType="centerCrop"
         android:src="@drawable/image_placeholder" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginStart="10dp"
+        android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/itemText"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:textSize="16sp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/green_dark"
         android:text="Placeholder Text"
         android:gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/reportByText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textSize="20sp"
+        android:textColor="@color/green_mid"
+        android:text="Placeholder Text"
+        android:gravity="center_vertical" />
+
+    </LinearLayout>
 </LinearLayout>

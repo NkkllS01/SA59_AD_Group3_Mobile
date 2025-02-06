@@ -37,6 +37,7 @@ class WildlifeMapsFragment : Fragment() {
 
     private lateinit var searchView: SearchView
     private val viewModel: WildlifeMapViewModel by activityViewModels()
+    private val searchViewModel: SearchViewModel by activityViewModels()
 
     private var currentLocation: Location? = null
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -94,7 +95,8 @@ class WildlifeMapsFragment : Fragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
-                    searchByKeyword(it)
+                    searchViewModel.searchByKeyword(it)
+                    findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SearchResultsFragment)
                 }
                 return true
             }
@@ -224,7 +226,7 @@ class WildlifeMapsFragment : Fragment() {
         }
     }
 
-    private fun searchByKeyword(keyword: String) {
+    /* private fun searchByKeyword(keyword: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val speciesResponse = speciesApiService.searchSpeciesByKeyword(keyword).execute()
@@ -251,6 +253,6 @@ class WildlifeMapsFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-    }
+    } */
 
 }
