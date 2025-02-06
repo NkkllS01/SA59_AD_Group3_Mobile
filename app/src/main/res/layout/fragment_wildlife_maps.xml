@@ -23,19 +23,37 @@
         android:layout_height="match_parent"
         tools:context=".WildlifeMenu.WildlifeMapsFragment"
         android:visibility="gone" />
-    
-    <SearchView
-        android:id="@+id/search"
+
+    <RelativeLayout
+        android:id="@+id/searchContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:queryHint="Search..."
-        android:iconifiedByDefault="false"
-        android:elevation="5dp"
-        android:background="@drawable/bg_search_view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone" />
+        android:layout_alignParentTop="true">
 
+        <SearchView
+            android:id="@+id/search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/cameraButton"
+            android:layout_weight="1"
+            android:queryHint="Search..."
+            android:iconifiedByDefault="false"
+            android:elevation="5dp"
+            android:background="@drawable/bg_search_view"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/cameraButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
+            android:padding="4dp"
+            android:src="@drawable/camera_icon"
+            android:scaleType="centerInside"
+            android:background="@drawable/bg_camera_search"
+            android:contentDescription="Open Camera" />
+    </RelativeLayout>
 </RelativeLayout>
