@@ -72,4 +72,5 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation("com.google.maps.android:android-maps-utils:3.4.0")
     implementation("androidx.core:core-ktx:1.15.0")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
 }

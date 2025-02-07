@@ -61,6 +61,10 @@ class WildlifeMapsFragment : Fragment() {
         } ?: println("WARNING: Location not available yet.")
 
         setupClusterManager(googleMap)
+
+        googleMap.setOnMapClickListener { latLng ->
+            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng),500,null)
+        }
     }
 
     override fun onCreateView(
