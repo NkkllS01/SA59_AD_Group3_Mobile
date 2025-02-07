@@ -38,6 +38,8 @@ class WildlifeMapsFragment : Fragment() {
 
     private lateinit var searchView: SearchView
     private lateinit var cameraIcon: ImageView
+    /* private lateinit btn_Wildlife: Button
+    private lateinit btn_NewSighting: Button */
     private val viewModel: WildlifeMapViewModel by activityViewModels()
     private val searchViewModel: SearchViewModel by activityViewModels()
 
@@ -113,6 +115,20 @@ class WildlifeMapsFragment : Fragment() {
                 return false
             }
         })
+
+        /* cameraIcon.setOnClickListener {
+            findNavController().navigate(R.id.action_WildlifeMapsFragment_to_TBC)
+        }
+
+        val btn_Wildlife: Button = requireView().findViewById(R.id.btn_wildlife)
+        btn_Wildlife.setOnClickListener {
+            findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SpeciesCategoryFragment)
+        } */
+
+        val btn_NewSighting: Button = requireView().findViewById(R.id.btn_newSighting)
+        btn_NewSighting.setOnClickListener {
+            findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SightingFragment)
+        }
     }
 
     private fun getCurrentLocationUser() {
@@ -150,12 +166,15 @@ class WildlifeMapsFragment : Fragment() {
 
         val searchView: SearchView = requireView().findViewById(R.id.search)
         searchView.visibility = View.VISIBLE
+
         val cameraIcon: ImageView = requireView().findViewById(R.id.cameraButton)
         cameraIcon.visibility = View.VISIBLE
-        val btn_wildlife: Button = requireView().findViewById(R.id.btn_wildlife)
-        btn_wildlife.visibility = View.VISIBLE
-        val btn_newSighting: Button = requireView().findViewById(R.id.btn_newSighting)
-        btn_newSighting.visibility = View.VISIBLE
+
+        val btn_Wildlife: Button = requireView().findViewById(R.id.btn_wildlife)
+        btn_Wildlife.visibility = View.VISIBLE
+
+        val btn_NewSighting: Button = requireView().findViewById(R.id.btn_newSighting)
+        btn_NewSighting.visibility = View.VISIBLE
     }
 
     override fun onRequestPermissionsResult(
