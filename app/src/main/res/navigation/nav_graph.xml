@@ -28,8 +28,15 @@
             app:popUpToInclusive="false" >
         </action>
         <action
-            android:id="@+id/action_wildlifeMapsFragment_to_speciesCategoryFragment"
-            app:destination="@id/speciesCategoryFragment" />
+            android:id="@+id/action_WildlifeMapsFragment_to_SpeciesCategoryFragment"
+            app:destination="@id/speciesCategoryFragment">
+        </action>
+        <action
+            android:id="@+id/action_WildlifeMapsFragment_to_SightingFragment"
+            app:destination="@id/sightingFragment"
+            app:popUpTo="@id/wildlifeMapsFragment"
+            app:popUpToInclusive="false" >
+        </action>
     </fragment>
 
     <fragment
@@ -60,6 +67,15 @@
         android:id="@+id/searchResultsFragment"
         android:name="com.example.singnature.WildlifeMenu.SearchResultsFragment"
         android:label="Search Results">
+    </fragment>
+
+    <fragment
+        android:id="@+id/sightingFragment"
+        android:name="com.example.singnature.WildlifeMenu.SightingFragment"
+        android:label="Sighting Details">
+        <argument
+            android:name="sightingId"
+            app:argType="integer" />
     </fragment>
 
     <fragment
