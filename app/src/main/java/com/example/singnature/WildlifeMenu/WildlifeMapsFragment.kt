@@ -9,6 +9,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
@@ -147,6 +148,10 @@ class WildlifeMapsFragment : Fragment() {
         searchView.visibility = View.VISIBLE
         val cameraIcon: ImageView = requireView().findViewById(R.id.cameraButton)
         cameraIcon.visibility = View.VISIBLE
+        val btn_wildlife: Button = requireView().findViewById(R.id.btn_wildlife)
+        btn_wildlife.visibility = View.VISIBLE
+        val btn_newSighting: Button = requireView().findViewById(R.id.btn_newSighting)
+        btn_newSighting.visibility = View.VISIBLE
     }
 
     override fun onRequestPermissionsResult(
@@ -188,24 +193,24 @@ class WildlifeMapsFragment : Fragment() {
         googleMap.setOnCameraIdleListener(clusterManager)
         googleMap.setOnMarkerClickListener(clusterManager)
 
-        clusterManager.setOnClusterClickListener { cluster ->
-            val builder = LatLngBounds.Builder()
-
-            for (item in cluster.items) {
-                builder.include(item.position)
-            }
-
-            val bounds = builder.build()
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
+        clusterManager.setOnClusterItemClickListener { item ->
+            showBottomSheet(item)
             true
         }
 
-        clusterManager.setOnClusterItemClickListener { item ->
-            println("DEBUG: Individual item clicked: ${item.details}")
-            false
+        fetchSightings()
+    }
+
+    private fun showBottomSheet(sighting: Sightings) {
+        val bundle = Bundle().apply {
+            putInt("sightingId", sighting.sightingId)
+            putString("sightingTitle", sighting.specieName)
+            putString("sightingUser", sighting.userName)
         }
 
-        fetchSightings()
+        val bottomSheet = SightingBottomSheetFragment()
+        bottomSheet.arguments = bundle
+        bottomSheet.show(parentFragmentManager, bottomSheet.tag)
     }
 
     private fun fetchSightings() {
