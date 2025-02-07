@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">SingNature</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="map_id">4f8e9c83d9483843</string>
+    <string name="map_Api_key">AIzaSyA1QDles42NyhRJbN5WjMbYadWuYzyG5lo</string>
 </resources>

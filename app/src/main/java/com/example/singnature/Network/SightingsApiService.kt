@@ -12,6 +12,9 @@ interface SightingsApiService {
 
     @GET("sightings/search/{keyword}")
     fun searchSightingsByKeyword(@Path(value = "keyword", encoded = true) keyword: String): Call<List<Sightings>>
+
+    @GET("sightings/{id}")
+    fun getSightingById(@Path("id") id: Int): Call<Sightings>
 }
 
 val sightingsApiService: SightingsApiService = ApiClient.instance.create(SightingsApiService::class.java)
