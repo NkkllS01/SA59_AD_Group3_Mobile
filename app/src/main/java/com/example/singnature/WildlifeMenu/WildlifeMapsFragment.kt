@@ -38,8 +38,8 @@ class WildlifeMapsFragment : Fragment() {
 
     private lateinit var searchView: SearchView
     private lateinit var cameraIcon: ImageView
-    /* private lateinit btn_Wildlife: Button
-    private lateinit btn_NewSighting: Button */
+    private lateinit var btn_Wildlife: Button
+    //private lateinit btn_NewSighting: Button //
     private val viewModel: WildlifeMapViewModel by activityViewModels()
     private val searchViewModel: SearchViewModel by activityViewModels()
 
@@ -91,7 +91,8 @@ class WildlifeMapsFragment : Fragment() {
             }, 3000)
         }
 
-        mapFragment = childFragmentManager.findFragmentById(R.id.wildlifeMapsFragment) as SupportMapFragment
+        mapFragment =
+            childFragmentManager.findFragmentById(R.id.wildlifeMapsFragment) as SupportMapFragment
         mapFragment.view?.visibility = View.GONE
 
         fusedLocationProviderClient =
@@ -119,17 +120,19 @@ class WildlifeMapsFragment : Fragment() {
         /* cameraIcon.setOnClickListener {
             findNavController().navigate(R.id.action_WildlifeMapsFragment_to_TBC)
         }
+        */
 
         val btn_Wildlife: Button = requireView().findViewById(R.id.btn_wildlife)
         btn_Wildlife.setOnClickListener {
             findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SpeciesCategoryFragment)
-        } */
-
+        }
+    }
+        /*
         val btn_NewSighting: Button = requireView().findViewById(R.id.btn_newSighting)
         btn_NewSighting.setOnClickListener {
             findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SightingFragment)
         }
-    }
+    */
 
     private fun getCurrentLocationUser() {
         if(ActivityCompat.checkSelfPermission(
@@ -147,7 +150,7 @@ class WildlifeMapsFragment : Fragment() {
         fusedLocationProviderClient.getCurrentLocation(
             com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY, null
         ).addOnSuccessListener {
-            location ->
+                location ->
             if(location != null) {
                 currentLocation = location
                 initMap()
@@ -183,13 +186,13 @@ class WildlifeMapsFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-            if (requestCode == permissionCode && grantResults.isNotEmpty() &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocationUser()
-            } else {
-                println("ERROR: Location permission denied")
-            }
+        if (requestCode == permissionCode && grantResults.isNotEmpty() &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            getCurrentLocationUser()
+        } else {
+            println("ERROR: Location permission denied")
         }
+    }
 
     private fun enableMyLocation(googleMap: GoogleMap) {
         if (ActivityCompat.checkSelfPermission(
