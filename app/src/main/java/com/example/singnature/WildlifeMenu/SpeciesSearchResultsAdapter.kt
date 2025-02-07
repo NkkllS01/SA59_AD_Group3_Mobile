@@ -16,18 +16,20 @@ class SpeciesSearchResultsAdapter (
 
     override fun getCount(): Int = data.size
     override fun getItem(position: Int): Species = data[position]
-    override fun getItemId(position: Int): Long = data[position].SpecieId.toLong()
+    override fun getItemId(position: Int): Long = data[position].specieId.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
 
         val imageView = view.findViewById<ImageView>(R.id.itemImage)
         val textView = view.findViewById<TextView>(R.id.itemText)
+        val reportByText = view.findViewById<TextView>(R.id.reportByText)
 
         val item = getItem(position)
 
-        textView.text = item.SpecieName
+        textView.text = item.specieName
         imageView.setImageResource(R.drawable.image_placeholder)
+        reportByText.visibility = View.GONE
 
         return view
     }

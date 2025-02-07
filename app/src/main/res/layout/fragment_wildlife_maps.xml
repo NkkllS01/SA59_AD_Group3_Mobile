@@ -23,19 +23,70 @@
         android:layout_height="match_parent"
         tools:context=".WildlifeMenu.WildlifeMapsFragment"
         android:visibility="gone" />
-    
-    <SearchView
-        android:id="@+id/search"
+
+    <RelativeLayout
+        android:id="@+id/searchContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:queryHint="Search..."
-        android:iconifiedByDefault="false"
-        android:elevation="5dp"
-        android:background="@drawable/bg_search_view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone" />
+        android:layout_alignParentTop="true">
+
+        <SearchView
+            android:id="@+id/search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/cameraButton"
+            android:queryHint="Search..."
+            android:iconifiedByDefault="false"
+            android:elevation="5dp"
+            android:background="@drawable/bg_search_view"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/cameraButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
+            android:padding="4dp"
+            android:src="@drawable/camera_icon"
+            android:scaleType="centerInside"
+            android:background="@drawable/bg_camera_search"
+            android:contentDescription="Open Camera"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/buttonContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_wildlife"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wildlife"
+                android:background="@drawable/bg_button"
+                android:padding="8dp"
+                android:textColor="@android:color/white"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btn_newSighting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Sighting"
+                android:background="@drawable/bg_button"
+                android:padding="8dp"
+                android:textColor="@android:color/white"
+                android:layout_marginStart="10dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -9,6 +9,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
@@ -32,12 +33,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Date
 
-class WildlifeMapsFragment : Fragment(){
+class WildlifeMapsFragment : Fragment() {
 
     private lateinit var searchView: SearchView
+    private lateinit var cameraIcon: ImageView
     private val viewModel: WildlifeMapViewModel by activityViewModels()
+    private val searchViewModel: SearchViewModel by activityViewModels()
 
     private var currentLocation: Location? = null
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -60,8 +62,8 @@ class WildlifeMapsFragment : Fragment(){
 
         setupClusterManager(googleMap)
 
-        googleMap.setOnMapClickListener { latLng ->googleMap
-            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng), 500, null)
+        googleMap.setOnMapClickListener { latLng ->
+            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng),500,null)
         }
     }
 
@@ -99,7 +101,10 @@ class WildlifeMapsFragment : Fragment(){
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
-                    searchByKeyword(it)
+                    searchViewModel.searchByKeyword(it)
+                    if (findNavController().currentDestination?.id == R.id.wildlifeMapsFragment) {
+                        findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SearchResultsFragment)
+                    }
                 }
                 return true
             }
@@ -145,6 +150,12 @@ class WildlifeMapsFragment : Fragment(){
 
         val searchView: SearchView = requireView().findViewById(R.id.search)
         searchView.visibility = View.VISIBLE
+        val cameraIcon: ImageView = requireView().findViewById(R.id.cameraButton)
+        cameraIcon.visibility = View.VISIBLE
+        val btn_wildlife: Button = requireView().findViewById(R.id.btn_wildlife)
+        btn_wildlife.visibility = View.VISIBLE
+        val btn_newSighting: Button = requireView().findViewById(R.id.btn_newSighting)
+        btn_newSighting.visibility = View.VISIBLE
     }
 
     override fun onRequestPermissionsResult(
@@ -186,26 +197,24 @@ class WildlifeMapsFragment : Fragment(){
         googleMap.setOnCameraIdleListener(clusterManager)
         googleMap.setOnMarkerClickListener(clusterManager)
 
-        addSightingsMarkers(googleMap)
-
-        clusterManager.setOnClusterClickListener { cluster ->
-            val builder = LatLngBounds.Builder()
-
-            for (item in cluster.items) {
-                builder.include(item.position)
-            }
-
-            val bounds = builder.build()
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
+        clusterManager.setOnClusterItemClickListener { item ->
+            showBottomSheet(item)
             true
         }
 
-        clusterManager.setOnClusterItemClickListener { item ->
-            println("DEBUG: Individual item clicked: ${item.details}")
-            false
+        fetchSightings()
+    }
+
+    private fun showBottomSheet(sighting: Sightings) {
+        val bundle = Bundle().apply {
+            putInt("sightingId", sighting.sightingId)
+            putString("sightingTitle", sighting.specieName)
+            putString("sightingUser", sighting.userName)
         }
 
-        fetchSightings()
+        val bottomSheet = SightingBottomSheetFragment()
+        bottomSheet.arguments = bundle
+        bottomSheet.show(parentFragmentManager, bottomSheet.tag)
     }
 
     private fun fetchSightings() {
@@ -231,83 +240,4 @@ class WildlifeMapsFragment : Fragment(){
         }
     }
 
-    private fun searchByKeyword(keyword: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val speciesResponse = speciesApiService.searchSpeciesByKeyword(keyword).execute()
-                val sightingsResponse = sightingsApiService.searchSightingsByKeyword(keyword).execute()
-
-                if (speciesResponse.isSuccessful && sightingsResponse.isSuccessful) {
-                    val speciesList = speciesResponse.body() ?: emptyList()
-                    val sightingsList = sightingsResponse.body() ?: emptyList()
-
-                    withContext(Dispatchers.Main) {
-                        val action = WildlifeMapsFragmentDirections
-                            .actionWildlifeMapsFragmentToSearchResultsFragment(
-                                keyword,
-                                speciesList.toTypedArray(),
-                                sightingsList.toTypedArray()
-                            )
-                        findNavController().navigate(action)
-                    }
-                } else {
-                    println("ERROR: API call failed with response codes: Species ${speciesResponse.code()}, Sightings ${sightingsResponse.code()}")
-                }
-            } catch (e: Exception) {
-                println("ERROR: Failed to fetch search results - ${e.message}")
-                e.printStackTrace()
-            }
-        }
-    }
-    private fun addSightingsMarkers(googleMap: GoogleMap) {
-        // 新加坡的经纬度范围
-        val singaporeBounds = LatLngBounds(
-            LatLng(1.2500, 103.5700), // 西南角
-            LatLng(1.4700, 104.1000)  // 东北角
-        )
-
-        // 创建 Sightings 对象的列表
-        val sightingsList = listOf(
-            Sightings(
-                sightingId = 1,
-                userId = 101,
-                userName = "Alice",
-                date = Date(),
-                specieId = 201,
-                specieName = "Lion",
-                details = "Spotted near the river",
-                imageUrl = "http://example.com/lion.jpg",
-                latitude = 1.3521,  // 新加坡的经纬度示例
-                longitude = 103.8198,
-                status = "Active"
-            ),
-            Sightings(
-                sightingId = 2,
-                userId = 102,
-                userName = "Bob",
-                date = Date(),
-                specieId = 202,
-                specieName = "Elephant",
-                details = "Feeding on grass",
-                imageUrl = "http://example.com/elephant.jpg",
-                latitude = 1.2900,  // 新加坡的经纬度示例
-                longitude = 103.8500,
-                status = "Active"
-            ),
-            // 添加其他 Sightings 对象，确保它们在新加坡范围内
-        )
-
-        // 清空现有的标记（如果需要）
-        clusterManager.clearItems()
-
-        // 将 Sightings 对象添加到 ClusterManager
-        sightingsList.forEach { sighting ->
-            if (singaporeBounds.contains(sighting.getPosition())) {
-                clusterManager.addItem(sighting)
-            }
-        }
-
-        // 刷新聚类
-        clusterManager.cluster()
-    }
 }
