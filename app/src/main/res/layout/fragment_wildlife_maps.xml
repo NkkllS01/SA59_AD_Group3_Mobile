@@ -18,7 +18,7 @@
         xmlns:map="http://schemas.android.com/apk/res-auto"
         android:id="@+id/wildlifeMapsFragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        map:mapId="@string/map_id"
+        map:mapId="4f8e9c83d9483843"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".WildlifeMenu.WildlifeMapsFragment"
