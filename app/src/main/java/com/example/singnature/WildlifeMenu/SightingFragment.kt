@@ -1,6 +1,7 @@
 package com.example.singnature.WildlifeMenu
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
     private var sighting: Sightings? = null
     private lateinit var mapView: MapView
     private lateinit var googleMap: GoogleMap
+    private var sightingId: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +39,12 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
         mapView.getMapAsync(this)
 
         // call interface to retrieve sighting object
-        val sightingId = 123 // TO BE IMPLEMENTED
-        getSightingById(sightingId)
+        arguments.let{
+            if (it != null) {
+                sightingId=it.getInt("sightingID")
+            }
+        }
+        sightingId?.let { getSightingById(it) }
     }
 
     private fun getSightingById(id: Int) {
@@ -50,15 +56,31 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
                     sighting = response.body()
                     updateUI()
                 } else {
-
+                    handleError("Error: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<Sightings>, t: Throwable) {
-
+                handleError("Network error: ${t.message}")
             }
         })
 
+    }
+    private fun handleError(errorMessage: String) {
+        binding.apply{
+            titleTextView.visibility = View.GONE
+            sightingImageView.visibility = View.GONE
+            mapView.visibility = View.GONE
+            reportedByTextView.visibility = View.GONE
+            userNameTextView.visibility = View.GONE
+            dateTextView.visibility = View.GONE
+            sightingDateTextView.visibility = View.GONE
+            detailsTextView.visibility = View.GONE
+            sightingDetailsTextView.visibility = View.GONE
+
+            errorTextView.text = errorMessage
+            errorTextView.visibility = View.VISIBLE
+        }
     }
     private fun updateUI() {
         sighting?.let {
