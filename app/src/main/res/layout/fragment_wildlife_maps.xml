@@ -56,5 +56,37 @@
             android:contentDescription="Open Camera"
             android:visibility="gone" />
 
+        <LinearLayout
+            android:id="@+id/buttonContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_wildlife"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wildlife"
+                android:background="@drawable/bg_button"
+                android:padding="8dp"
+                android:textColor="@android:color/white"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btn_newSighting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Sighting"
+                android:background="@drawable/bg_button"
+                android:padding="8dp"
+                android:textColor="@android:color/white"
+                android:layout_marginStart="10dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
     </RelativeLayout>
+
 </RelativeLayout>
