@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.singnature.R
 
-data class SpeciesCategory(val name: String, val imageResId: Int)
+data class SpeciesCategory(val id: Int, val name: String, val imageResId: Int)
 
 class SpeciesCategoryAdapter(private val context: Context, private val speciesCategories: List<SpeciesCategory>) : BaseAdapter() {
     override fun getCount(): Int = speciesCategories.size

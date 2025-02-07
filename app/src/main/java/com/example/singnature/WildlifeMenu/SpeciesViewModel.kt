@@ -17,11 +17,11 @@ class SpeciesViewModel : ViewModel() {
     val speciesDetail: LiveData<Species?> get() = _speciesDetail
 
     // This method fetches species based on the category name
-    fun fetchSpeciesByCategory(categoryName: String) {
+    fun fetchSpeciesByCategory(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // Fetch species from API by category name
-                val speciesResponse = speciesApiService.getSpeciesByCategory(categoryName).execute()
+                // Fetch species from API by category Id
+                val speciesResponse = speciesApiService.getSpeciesByCategory(categoryId).execute()
 
                 if (speciesResponse.isSuccessful) {
                     _speciesList.postValue(speciesResponse.body() ?: emptyList())
@@ -42,6 +42,7 @@ class SpeciesViewModel : ViewModel() {
                 val speciesResponse = speciesApiService.getSpeciesById(specieId).execute()
 
                 if (speciesResponse.isSuccessful) {
+                    // Post value to main thread
                     _speciesDetail.postValue(speciesResponse.body())
                 } else {
                     println("ERROR: Failed to fetch species detail - ${speciesResponse.code()}")

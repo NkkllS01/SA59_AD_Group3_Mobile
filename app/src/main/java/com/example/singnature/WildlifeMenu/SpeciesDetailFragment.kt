@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.singnature.R
 
 class SpeciesDetailFragment : Fragment() {
@@ -20,7 +22,7 @@ class SpeciesDetailFragment : Fragment() {
     private lateinit var highlightsTextView: TextView
     private lateinit var loadingProgressBar: ProgressBar
 
-    private var specieId: Int? = null
+    private var specieId: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -36,14 +38,22 @@ class SpeciesDetailFragment : Fragment() {
         highlightsTextView = view.findViewById(R.id.speciesHighlight)
         loadingProgressBar = view.findViewById(R.id.loadingProgressBar)
 
-        specieId = arguments?.getInt("specieId")
+        // Retrieve specieId using the safe argument passing mechanism
+        val args = SpeciesDetailFragmentArgs.fromBundle(requireArguments())
+        specieId = args.specieId
 
-        // Fetch species details
-        specieId?.let {
-            speciesViewModel.fetchSpeciesDetail(it)
+        // Check if specieId is valid
+        if (specieId == -1) {
+            // Handle the error case where specieId is invalid or missing
+            Toast.makeText(context, "Species ID not found", Toast.LENGTH_SHORT).show()
+            findNavController().popBackStack()
+            return
         }
 
-        // Observe species detail
+        // Fetch species details using the valid specieId
+        speciesViewModel.fetchSpeciesDetail(specieId)
+
+        // Observe species detail and update UI
         speciesViewModel.speciesDetail.observe(viewLifecycleOwner) { specie ->
             specie?.let {
                 specieNameTextView.text = it.specieName
@@ -54,4 +64,3 @@ class SpeciesDetailFragment : Fragment() {
         }
     }
 }
-

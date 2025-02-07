@@ -21,9 +21,9 @@ class SpeciesCategoryFragment : Fragment() {
         categoryGridView = view.findViewById(R.id.categoryGridView)
 
         val categories = listOf(
-            SpeciesCategory("Bees", R.drawable.image_placeholder),
-            SpeciesCategory("Monitor Lizards", R.drawable.image_placeholder),
-            SpeciesCategory("Mushrooms", R.drawable.image_placeholder)
+            SpeciesCategory(1,"Bees", R.drawable.image_placeholder),
+            SpeciesCategory(2,"Monitor Lizards", R.drawable.image_placeholder),
+            SpeciesCategory(3,"Mushrooms", R.drawable.image_placeholder)
         )
 
         val adapter = SpeciesCategoryAdapter(requireContext(), categories)
@@ -32,9 +32,10 @@ class SpeciesCategoryFragment : Fragment() {
         categoryGridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val category = categories[position]
             val action = SpeciesCategoryFragmentDirections
-                .actionSpeciesCategoryFragmentToSpeciesListFragment(category.name)
+                .actionSpeciesCategoryFragmentToSpeciesListFragment(category.id,category.name)
             findNavController().navigate(action)
         }
+
 
         return view
     }

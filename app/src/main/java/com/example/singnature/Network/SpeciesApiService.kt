@@ -13,8 +13,8 @@ interface SpeciesApiService {
     @GET("species/{specieId}")
     fun getSpeciesById(@Path("specieId") specieId: Int): Call<Species>
 
-    @GET("species/category/{categoryName}")
-    fun getSpeciesByCategory(@Path("categoryName") categoryName: String): Call<List<Species>>
+    @GET("species/category/{categoryId}")
+    fun getSpeciesByCategory(@Path("categoryId") categoryId: Int): Call<List<Species>>
     }
 
 

@@ -71,6 +71,9 @@
             android:id="@+id/action_speciesCategoryFragment_to_speciesListFragment"
             app:destination="@+id/speciesListFragment">
             <argument
+                android:name="categoryId"
+                app:argType="integer" />
+            <argument
                 android:name="categoryName"
                 app:argType="string" />
         </action>
@@ -91,8 +94,8 @@
         android:name="com.example.singnature.WildlifeMenu.SpeciesDetailFragment"
         android:label="Species Details">
         <argument
-            android:name="speciesId"
-            app:argType="integer" />
+            android:name="specieId"
+            app:argType="integer"/>
     </fragment>
 
 </navigation>

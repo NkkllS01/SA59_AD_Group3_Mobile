@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -30,14 +31,19 @@ class SpeciesListFragment : Fragment() {
         speciesListView = view.findViewById(R.id.speciesListView)
         categoryTitle = view.findViewById(R.id.categoryTitle)
 
-        // Get the category name from arguments
-        val categoryName = arguments?.getString("categoryName") ?: ""
+        // Get the categoryId and categoryName from arguments
+        val categoryId = arguments?.getInt("categoryId") ?: -1  // Default to -1 if null
+        val categoryName = arguments?.getString("categoryName") ?: "Unknown Category"
 
         // Set the title to the selected category
-        categoryTitle.text = "$categoryName"
+        categoryTitle.text = categoryName
 
-        // Fetch species based on the category name
-        speciesViewModel.fetchSpeciesByCategory(categoryName)
+        if (categoryId != -1) {
+            // Fetch species based on the categoryId
+            speciesViewModel.fetchSpeciesByCategory(categoryId)
+        } else {
+            Toast.makeText(requireContext(), "Invalid category ID", Toast.LENGTH_SHORT).show()
+        }
 
         // Observe the species list from the ViewModel
         speciesViewModel.speciesList.observe(viewLifecycleOwner) { speciesList ->
@@ -46,19 +52,26 @@ class SpeciesListFragment : Fragment() {
                 speciesListView.adapter = SpeciesSearchResultsAdapter(requireContext(), speciesList)
             } else {
                 speciesListView.adapter = null
+                Toast.makeText(requireContext(), "No species found.", Toast.LENGTH_SHORT).show()
             }
         }
 
         speciesListView.setOnItemClickListener { _, _, position, _ ->
-            val speciesList = speciesViewModel.speciesList.value ?: emptyList() // Getting the list from ViewModel
-
+            val speciesList = speciesViewModel.speciesList.value ?: emptyList()
             val selectedSpecies = speciesList[position]
-            val bundle = Bundle().apply {
-                putInt("specieId", selectedSpecies.specieId) // Pass the selected species ID to the detail fragment
+
+            // Check for null specieId
+            val specieId = selectedSpecies.specieId
+            if (specieId == null) {
+                Toast.makeText(context, "Species ID is missing!", Toast.LENGTH_SHORT).show()
+                return@setOnItemClickListener
             }
-            val speciesDetailFragment = SpeciesDetailFragment()
-            speciesDetailFragment.arguments = bundle
-            findNavController().navigate(R.id.action_speciesListFragment_to_speciesDetailFragment, bundle)
+
+            // Pass specieId to SpeciesDetailFragment
+            val action = SpeciesListFragmentDirections
+                .actionSpeciesListFragmentToSpeciesDetailFragment(specieId)
+            findNavController().navigate(action)
+
         }
     }
 }
