@@ -37,6 +37,14 @@
             app:popUpTo="@id/wildlifeMapsFragment"
             app:popUpToInclusive="false" >
         </action>
+        <action
+            android:id="@+id/action_WildlifeMapsFragment_to_WildlifeFragment"
+            app:destination="@id/wildlifeFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/wildlifeFragment"
+        android:name="com.example.singnature.WildlifeMenu.WildlifeFragment">
     </fragment>
 
     <fragment

@@ -117,10 +117,10 @@ class WildlifeMapsFragment : Fragment() {
             }
         })
 
-        /* cameraIcon.setOnClickListener {
-            findNavController().navigate(R.id.action_WildlifeMapsFragment_to_TBC)
+        cameraIcon = view.findViewById(R.id.cameraButton)
+        cameraIcon.setOnClickListener {
+            findNavController().navigate(R.id.action_WildlifeMapsFragment_to_WildlifeFragment)
         }
-        */
 
         val btn_Wildlife: Button = requireView().findViewById(R.id.btn_wildlife)
         btn_Wildlife.setOnClickListener {
