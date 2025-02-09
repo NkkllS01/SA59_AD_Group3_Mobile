@@ -10,9 +10,11 @@ import com.bumptech.glide.Glide
 import com.example.singnature.Network.sightingsApiService
 import com.example.singnature.R
 import com.example.singnature.databinding.FragmentSightingBinding
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -71,6 +73,8 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
             mapView.visibility = View.GONE
             reportedByTextView.visibility = View.GONE
             userNameTextView.visibility = View.GONE
+            speciesTextView.visibility = View.GONE
+            speciesNameTextView.visibility = View.GONE
             dateTextView.visibility = View.GONE
             sightingDateTextView.visibility = View.GONE
             detailsTextView.visibility = View.GONE
@@ -90,6 +94,9 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
                 dateTextView.text = "Date:"
                 sightingDateTextView.text = it.date.toString()
 
+                speciesTextView.text = "Species name:"
+                speciesNameTextView.text = it.specieName
+
                 detailsTextView.text = "Details:"
                 sightingDetailsTextView.text = it.details }
 
@@ -101,6 +108,12 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(map: GoogleMap) {
         googleMap=map
+
+        googleMap.uiSettings.isScrollGesturesEnabled = false
+        googleMap.uiSettings.isZoomGesturesEnabled = true
+
+        val latLng: LatLng? = sighting?.let { LatLng(it.latitude,it.longitude) }
+        latLng?.let { CameraUpdateFactory.newLatLngZoom(it,12f) }?.let { map.moveCamera(it) }
     }
     override fun onResume() {
         super.onResume()
