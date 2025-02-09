@@ -27,7 +27,11 @@ import com.example.singnature.R
 import com.example.singnature.imageSearch.RetrofitClient
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -165,26 +169,27 @@ class WildlifeFragment : Fragment() {
 
     private fun uploadImageToServer(imageFile : File) {
         // Prepare the file part
-        val requestBody = RequestBody.create("image/jpeg".toMediaTypeOrNull(), imageFile)
-        val filePart = MultipartBody.Part.createFormData("file", imageFile.name, requestBody)
+        val requestBody = imageFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        val filePart = MultipartBody.Part.createFormData("image", imageFile.name, requestBody)
 
         // Call the API
         val call = RetrofitClient.instance.uploadImage(filePart)
         call.enqueue(object : Callback<ClassificationResponse> {
             override fun onResponse(call: Call<ClassificationResponse>, response: Response<ClassificationResponse>) {
+                Log.d("API Response", "HTTP Code: ${response.code()}")
+
                 if (response.isSuccessful) {
                     val result = response.body()
                     Log.d("API Response", "Success: $result")
 
-                    if (result != null) {
+                    if (result != null && result.species.isNotEmpty()) {
                         // Format the result
                         val resultText = StringBuilder()
-                        resultText.append("Class: ${result.className}\n\n")
-                        resultText.append("Probabilities:\n")
-                        resultText.append("Apple: ${String.format("%.2f", result.probabilities.apple * 100)}%\n")
-                        resultText.append("Banana: ${String.format("%.2f", result.probabilities.banana * 100)}%\n")
-                        resultText.append("Mixed: ${String.format("%.2f", result.probabilities.mixed * 100)}%\n")
-                        resultText.append("Orange: ${String.format("%.2f", result.probabilities.orange * 100)}%")
+                        resultText.append("Detected Species:\n\n")
+
+                        result.species.forEachIndexed { index, speciesName ->
+                            resultText.append("${index + 1}, $speciesName\n")
+                        }
 
                         // Update TextView with the result
                         requireActivity().runOnUiThread {
@@ -192,10 +197,12 @@ class WildlifeFragment : Fragment() {
                             textResult?.text = resultText.toString()
                         }
                     } else {
-                        Toast.makeText(context, "Invalid response received", Toast.LENGTH_SHORT).show()
+                        Log.e("API Response", "No species detected.")
+                        Toast.makeText(context, "No species detected", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Log.e("API Response", "Failure: ${response.errorBody()?.string()}")
+                    val errorBody = response.errorBody()?.string() ?: "Unknown Error"
+                    Log.e("API Response", "Failure: $errorBody")
                     Toast.makeText(context, "Failed to upload image", Toast.LENGTH_SHORT).show()
                 }
             }
