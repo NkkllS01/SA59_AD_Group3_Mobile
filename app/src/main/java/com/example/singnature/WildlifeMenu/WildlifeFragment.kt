@@ -22,9 +22,16 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.singnature.Network.sightingsApiService
+import com.example.singnature.Network.speciesApiService
 import com.example.singnature.R
 import com.example.singnature.WildlifeMenu.imageSearch.ClassificationResponse
 import com.example.singnature.WildlifeMenu.imageSearch.RetrofitClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -40,6 +47,8 @@ class WildlifeFragment : Fragment() {
     private lateinit var imgDisplay : ImageView
     private var currentPhotoPath : String? = null
 
+    private lateinit var searchViewModel: SearchViewModel
+
     companion object {
         private const val REQUEST_IMAGE_CAPTURE = 1
         private const val REQUEST_SELECT_GALLERY = 2
@@ -51,6 +60,7 @@ class WildlifeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_wildlife, container, false)
+        searchViewModel = ViewModelProvider(requireActivity()).get(SearchViewModel::class.java)
 
         val btnTakePicture = view.findViewById<Button>(R.id.btn_take_picture)
         val btnSelectGallery = view.findViewById<Button>(R.id.btn_select_gallery)
@@ -197,6 +207,10 @@ class WildlifeFragment : Fragment() {
                         requireActivity().runOnUiThread {
                             textResult?.text = resultText.toString()
                         }
+
+                        val speciesString = result.species.joinToString(", ")
+                        searchViewModel.searchByKeyword(speciesString)
+                        navigateToSearchResults()
                     } else {
                         Log.e("API Response", "No species detected.")
                         Toast.makeText(context, "Invalid response received", Toast.LENGTH_SHORT).show()
@@ -235,5 +249,10 @@ class WildlifeFragment : Fragment() {
             }
             tempFile.absolutePath
         }
+    }
+
+    private fun navigateToSearchResults() {
+        val action = WildlifeFragmentDirections.actionWildlifeFragmentToSearchResultsFragment()
+        findNavController().navigate(action)
     }
 }
