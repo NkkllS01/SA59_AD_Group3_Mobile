@@ -40,9 +40,7 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
 
         // call interface to retrieve sighting object
         arguments.let{
-            if (it != null) {
-                sightingId=it.getInt("sightingID")
-            }
+            sightingId = it?.let { it1 -> SightingFragmentArgs.fromBundle(it1).sightingId }
         }
         sightingId?.let { getSightingById(it) }
     }

@@ -63,6 +63,9 @@
         android:id="@+id/searchResultsFragment"
         android:name="com.example.singnature.WildlifeMenu.SearchResultsFragment"
         android:label="Search Results">
+        <action
+            android:id="@+id/action_searchResultFragment_to_sightingFragment"
+            app:destination="@id/sightingFragment" />
     </fragment>
 
     <fragment
