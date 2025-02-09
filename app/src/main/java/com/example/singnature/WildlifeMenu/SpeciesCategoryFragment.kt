@@ -21,9 +21,9 @@ class SpeciesCategoryFragment : Fragment() {
         categoryGridView = view.findViewById(R.id.categoryGridView)
 
         val categories = listOf(
-            SpeciesCategory(1,"Bees", R.drawable.image_placeholder),
+            SpeciesCategory(1,"Bees & Hornets", R.drawable.image_placeholder),
             SpeciesCategory(2,"Monitor Lizards", R.drawable.image_placeholder),
-            SpeciesCategory(3,"Mushrooms", R.drawable.image_placeholder)
+            SpeciesCategory(3,"Fungi", R.drawable.image_placeholder)
         )
 
         val adapter = SpeciesCategoryAdapter(requireContext(), categories)

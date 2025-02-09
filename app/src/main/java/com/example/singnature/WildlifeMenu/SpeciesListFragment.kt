@@ -49,7 +49,11 @@ class SpeciesListFragment : Fragment() {
         speciesViewModel.speciesList.observe(viewLifecycleOwner) { speciesList ->
             if (speciesList.isNotEmpty()) {
                 // Set the adapter when the species list is updated
-                speciesListView.adapter = SpeciesSearchResultsAdapter(requireContext(), speciesList)
+                speciesListView.adapter = SpeciesSearchResultsAdapter(requireContext(), speciesList) { selectedSpecies ->
+                    val action = SpeciesListFragmentDirections
+                        .actionSpeciesListFragmentToSpeciesDetailFragment(selectedSpecies.specieId)
+                    findNavController().navigate(action)
+                }
             } else {
                 speciesListView.adapter = null
                 Toast.makeText(requireContext(), "No species found.", Toast.LENGTH_SHORT).show()
