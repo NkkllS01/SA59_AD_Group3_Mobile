@@ -153,7 +153,7 @@ class WildlifeMapsFragment : Fragment() {
                 location ->
             if(location != null) {
                 currentLocation = location
-                if (view != null) {
+                if (view != null && isAdded) {
                     initMap()
                 }
             } else {
