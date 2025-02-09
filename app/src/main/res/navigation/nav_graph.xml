@@ -28,6 +28,10 @@
             app:popUpToInclusive="false" >
         </action>
         <action
+            android:id="@+id/action_WildlifeMapsFragment_to_SpeciesCategoryFragment"
+            app:destination="@id/speciesCategoryFragment">
+        </action>
+        <action
             android:id="@+id/action_WildlifeMapsFragment_to_SightingFragment"
             app:destination="@id/sightingFragment"
             app:popUpTo="@id/wildlifeMapsFragment"
@@ -64,8 +68,8 @@
         android:name="com.example.singnature.WildlifeMenu.SearchResultsFragment"
         android:label="Search Results">
         <action
-            android:id="@+id/action_searchResultFragment_to_sightingFragment"
-            app:destination="@id/sightingFragment" />
+            android:id="@+id/action_searchResultsFragment_to_speciesDetailFragment"
+            app:destination="@id/speciesDetailFragment" />
     </fragment>
 
     <fragment
@@ -75,6 +79,42 @@
         <argument
             android:name="sightingId"
             app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/speciesCategoryFragment"
+        android:name="com.example.singnature.WildlifeMenu.SpeciesCategoryFragment"
+        android:label="Species Category">
+
+        <action
+            android:id="@+id/action_speciesCategoryFragment_to_speciesListFragment"
+            app:destination="@+id/speciesListFragment">
+            <argument
+                android:name="categoryId"
+                app:argType="integer" />
+            <argument
+                android:name="categoryName"
+                app:argType="string" />
+        </action>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/speciesListFragment"
+        android:name="com.example.singnature.WildlifeMenu.SpeciesListFragment"
+        android:label="Species List" >
+        <action
+            android:id="@+id/action_speciesListFragment_to_speciesDetailFragment"
+            app:destination="@+id/speciesDetailFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/speciesDetailFragment"
+        android:name="com.example.singnature.WildlifeMenu.SpeciesDetailFragment"
+        android:label="Species Details">
+        <argument
+            android:name="specieId"
+            app:argType="integer"/>
     </fragment>
 
 </navigation>

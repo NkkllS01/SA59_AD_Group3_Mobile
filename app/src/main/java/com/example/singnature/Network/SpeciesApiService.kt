@@ -9,6 +9,13 @@ import retrofit2.http.Query
 interface SpeciesApiService {
     @GET("species/search/{keyword}")
     fun searchSpeciesByKeyword(@Path(value = "keyword", encoded = true) keyword: String): Call<List<Species>>
-}
+
+    @GET("species/{specieId}")
+    fun getSpeciesById(@Path("specieId") specieId: Int): Call<Species>
+
+    @GET("species/category/{categoryId}")
+    fun getSpeciesByCategory(@Path("categoryId") categoryId: Int): Call<List<Species>>
+    }
+
 
 val speciesApiService: SpeciesApiService = ApiClient.instance.create(SpeciesApiService::class.java)

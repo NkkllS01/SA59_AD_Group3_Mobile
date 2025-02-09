@@ -14,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.singnature.R
+import androidx.navigation.fragment.findNavController
 
 class SearchResultsFragment : Fragment() {
 
@@ -38,7 +39,11 @@ class SearchResultsFragment : Fragment() {
             if (speciesList.isNotEmpty()) {
                 speciesHeader.visibility = View.VISIBLE
                 speciesListView.visibility = View.VISIBLE
-                speciesListView.adapter = SpeciesSearchResultsAdapter(requireContext(), speciesList)
+                speciesListView.adapter = SpeciesSearchResultsAdapter(requireContext(), speciesList) { selectedSpecies ->
+                    val action = SearchResultsFragmentDirections
+                        .actionSearchResultsFragmentToSpeciesDetailFragment(selectedSpecies.specieId)
+                    findNavController().navigate(action)
+                }
                 println("DEBUG: Updated species list size: ${speciesList.size}")
             } else {
                 speciesHeader.visibility = View.GONE
