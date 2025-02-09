@@ -45,6 +45,11 @@
     <fragment
         android:id="@+id/wildlifeFragment"
         android:name="com.example.singnature.WildlifeMenu.WildlifeFragment">
+        <action
+            android:id="@+id/action_WildlifeFragment_to_SearchResultsFragment"
+            app:destination="@id/searchResultsFragment"
+            app:popUpTo="@id/wildlifeMapsFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
