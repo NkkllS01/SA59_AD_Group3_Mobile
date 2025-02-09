@@ -11,8 +11,10 @@ import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.singnature.R
+import androidx.navigation.fragment.findNavController
 
 class SearchResultsFragment : Fragment() {
 
@@ -37,7 +39,11 @@ class SearchResultsFragment : Fragment() {
             if (speciesList.isNotEmpty()) {
                 speciesHeader.visibility = View.VISIBLE
                 speciesListView.visibility = View.VISIBLE
-                speciesListView.adapter = SpeciesSearchResultsAdapter(requireContext(), speciesList)
+                speciesListView.adapter = SpeciesSearchResultsAdapter(requireContext(), speciesList) { selectedSpecies ->
+                    val action = SearchResultsFragmentDirections
+                        .actionSearchResultsFragmentToSpeciesDetailFragment(selectedSpecies.specieId)
+                    findNavController().navigate(action)
+                }
                 println("DEBUG: Updated species list size: ${speciesList.size}")
             } else {
                 speciesHeader.visibility = View.GONE
@@ -51,6 +57,12 @@ class SearchResultsFragment : Fragment() {
                 sightingsHeader.visibility = View.VISIBLE
                 sightingsListView.visibility = View.VISIBLE
                 sightingsListView.adapter = SightingsSearchResultsAdapter(requireContext(), sightingsList)
+
+                sightingsListView.setOnItemClickListener(){_,_,position,_->
+                    val sighting =sightingsList[position]
+                    val action = SearchResultsFragmentDirections.actionSearchResultFragmentToSightingFragment(sightingId = sighting.sightingId)
+                    findNavController().navigate(action)
+                }
                 println("DEBUG: Updated sightings list size: ${sightingsList.size}")
             } else {
                 sightingsHeader.visibility = View.GONE

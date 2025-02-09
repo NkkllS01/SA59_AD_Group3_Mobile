@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,7 +12,8 @@ import com.example.singnature.R
 
 class SpeciesSearchResultsAdapter (
     private val context: Context,
-    private val data: List<Species>
+    private val data: List<Species>,
+    private val onItemClick: (Species) -> Unit
 ) : BaseAdapter() {
 
     override fun getCount(): Int = data.size
@@ -30,6 +32,10 @@ class SpeciesSearchResultsAdapter (
         textView.text = item.specieName
         imageView.setImageResource(R.drawable.image_placeholder)
         reportByText.visibility = View.GONE
+
+        view.setOnClickListener {
+            onItemClick(item)
+        }
 
         return view
     }
