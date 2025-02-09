@@ -56,7 +56,6 @@ class SpeciesListFragment : Fragment() {
                 }
             } else {
                 speciesListView.adapter = null
-                Toast.makeText(requireContext(), "No species found.", Toast.LENGTH_SHORT).show()
             }
         }
 
