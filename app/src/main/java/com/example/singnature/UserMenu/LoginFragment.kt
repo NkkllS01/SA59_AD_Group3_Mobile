@@ -3,36 +3,38 @@ package com.example.singnature.UserMenu
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelStore
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
+import com.example.singnature.Network.ApiClient
 import com.example.singnature.R
 import com.example.singnature.databinding.FragmentLoginBinding
+import com.example.singnature.Network.AuthService
+import com.example.singnature.Network.LoginRequest
+import com.example.singnature.Network.LoginResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginFragment : Fragment() {
 
-    private var _binding : FragmentLoginBinding? = null
+    private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var sharedPref : SharedPreferences
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var authService: AuthService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-        // Initialize SharedPreferences
         sharedPref = requireActivity().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        authService = ApiClient.authService
 
         setupListener()
 
@@ -41,7 +43,6 @@ class LoginFragment : Fragment() {
 
     private fun setupListener() {
         binding.apply {
-            // Handle login button click
             loginButton.setOnClickListener {
                 val username = usernameEditText.text.toString()
                 val password = passwordEditText.text.toString()
@@ -51,28 +52,48 @@ class LoginFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                // Save login details to SharedPreferences
-                saveLoginDetails(username, password)
-                Navigation.findNavController(requireView()).navigate(R.id.userFragment)
+                performLogin(username, password)
             }
 
             createAccountLink.setOnClickListener {
-                // Navigate to account creation screen
-                root.findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+                Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_registerFragment)
             }
         }
     }
 
-    private fun saveLoginDetails(username: String, password: String) {
+    private fun performLogin(username: String, password: String) {
+        val loginRequest = LoginRequest(username, password)
+
+        authService.login(loginRequest).enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                if (response.isSuccessful) {
+                    val loginResponse = response.body()
+                    loginResponse?.let {
+                        saveLoginDetails(username, it.userId)
+                        showToast("Login successful")
+                        Navigation.findNavController(requireView()).navigate(R.id.userFragment)
+                    }
+                } else {
+                    showToast("Invalid username or password")
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                showToast("Network error: ${t.message}")
+            }
+        })
+    }
+
+    private fun saveLoginDetails(username: String, userId: Int) {
         with(sharedPref.edit()) {
             putString("username", username)
-            putString("password", password)
+            putInt("userId", userId)
             putBoolean("isLoggedIn", true)
             apply()
         }
     }
 
-    fun showToast(msg : String) {
+    private fun showToast(msg: String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 
