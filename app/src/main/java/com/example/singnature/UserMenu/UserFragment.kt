@@ -8,14 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import com.example.singnature.Network.ApiClient
 import com.example.singnature.databinding.FragmentUserBinding
 import com.example.singnature.Network.AuthService
 import com.example.singnature.Network.UpdateProfileRequest
 import com.example.singnature.R
+import okhttp3.HttpUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class UserFragment : Fragment() {
 
@@ -121,11 +125,15 @@ class UserFragment : Fragment() {
             clear()
             apply()
         }
+
         showToast("Logged out successfully")
 
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container_view, LoginFragment())
-            .commit()
+        val navController = requireActivity().findNavController(R.id.fragment_container_view)
+        val navOptions = NavOptions.Builder()
+            .setPopUpTo(R.id.nav_graph, true)
+            .build()
+
+        navController.navigate(R.id.loginFragment, null, navOptions)
     }
 
     private fun showToast(msg: String) {
