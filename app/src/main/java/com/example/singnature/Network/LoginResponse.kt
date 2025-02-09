@@ -1,7 +1,11 @@
 package com.example.singnature.Network
 
-
 data class LoginResponse(
-    val message: String,
-    val userId: Int
+    val userId: Int,
+    val username: String,
+    val email: String?,
+    val phone: String?,
+    val subscribeWarning: Boolean,
+    val subscribeNewsletter: Boolean
 )
+
