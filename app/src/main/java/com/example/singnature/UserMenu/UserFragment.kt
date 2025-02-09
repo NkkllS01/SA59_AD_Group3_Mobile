@@ -34,44 +34,57 @@ class UserFragment : Fragment() {
         sharedPref = requireActivity().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
         authService = ApiClient.authService
 
-        loadUserProfile()  // 加载当前登录用户信息
-        setupListeners()   // 设置监听事件
+        loadUserProfile()
+        setupListeners()
 
         return binding.root
     }
 
 
     private fun loadUserProfile() {
+        val username = sharedPref.getString("username", "") ?: ""
+        val email = sharedPref.getString("email", "") ?: ""
+        val phone = sharedPref.getString("phone", "") ?: ""
+        val subscribeWarning = sharedPref.getBoolean("subscribeWarning", false)
+        val subscribeNewsletter = sharedPref.getBoolean("subscribeNewsletter", false)
+
+        println("DEBUG: username=$username, email=$email, phone=$phone, subscribeWarning=$subscribeWarning, subscribeNewsletter=$subscribeNewsletter")
+
         binding.apply {
-            // 获取 SharedPreferences 中存储的用户信息
-            usernameEditText.setText(sharedPref.getString("username", ""))
-            emailEditText.setText(sharedPref.getString("email", ""))
-            phoneEditText.setText(sharedPref.getString("phone", ""))
-            subscribeWarningSwitch.isChecked = sharedPref.getBoolean("subscribeWarning", false)
-            subscribeNewsletterSwitch.isChecked = sharedPref.getBoolean("subscribeNewsletter", false)
+            usernameEditText.setText(username)
+            emailEditText.setText(email)
+            phoneEditText.setText(phone)
+            subscribeWarningSwitch.isChecked = subscribeWarning
+            subscribeNewsletterSwitch.isChecked = subscribeNewsletter
         }
     }
 
 
+
     private fun setupListeners() {
         binding.apply {
-            // "保存修改" 按钮
             saveButton.setOnClickListener {
+                val userId = sharedPref.getInt("userId", -1) // 确保拿到 userId
+                if (userId == -1) {
+                    showToast("User ID not found, please login again.")
+                    return@setOnClickListener
+                }
+
                 val email = emailEditText.text.toString().trim()
                 val phone = phoneEditText.text.toString().trim()
                 val subscribeWarning = subscribeWarningSwitch.isChecked
                 val subscribeNewsletter = subscribeNewsletterSwitch.isChecked
 
-                val updateRequest = UpdateProfileRequest(email, phone, subscribeWarning, subscribeNewsletter)
+                val updateRequest = UpdateProfileRequest(userId, email, phone, subscribeWarning, subscribeNewsletter)
                 updateUserProfile(updateRequest)
             }
 
-            // "退出登录" 按钮
             logoutButton.setOnClickListener {
                 logoutUser()
             }
         }
     }
+
 
 
     private fun updateUserProfile(request: UpdateProfileRequest) {
@@ -110,7 +123,6 @@ class UserFragment : Fragment() {
         }
         showToast("Logged out successfully")
 
-        // ✅ 让 Fragment 返回到 LoginFragment
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container_view, LoginFragment())
             .commit()

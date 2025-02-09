@@ -68,8 +68,19 @@ class LoginFragment : Fragment() {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
+                    println("DEBUG: API Response -> userId=${loginResponse?.userId}, email=${loginResponse?.email}, phone=${loginResponse?.phone}, subscribeWarning=${loginResponse?.subscribeWarning}, subscribeNewsletter=${loginResponse?.subscribeNewsletter}")
+
                     loginResponse?.let {
-                        saveLoginDetails(username, it.userId)
+                        println("DEBUG: API Response -> userId=${it.userId}, email=${it.email}, phone=${it.phone}, subscribeWarning=${it.subscribeWarning}, subscribeNewsletter=${it.subscribeNewsletter}")
+
+                        saveLoginDetails(
+                            username = username,
+                            userId = it.userId,
+                            email = it.email,
+                            phone = it.phone,
+                            subscribeWarning = it.subscribeWarning,
+                            subscribeNewsletter = it.subscribeNewsletter
+                        )
                         showToast("Login successful")
                         Navigation.findNavController(requireView()).navigate(R.id.userFragment)
                     }
@@ -84,14 +95,21 @@ class LoginFragment : Fragment() {
         })
     }
 
-    private fun saveLoginDetails(username: String, userId: Int) {
+
+    private fun saveLoginDetails(username: String, userId: Int, email: String?, phone: String?, subscribeWarning: Boolean, subscribeNewsletter: Boolean) {
         with(sharedPref.edit()) {
             putString("username", username)
             putInt("userId", userId)
+            putString("email", email ?: "")
+            putString("phone", phone ?: "")
+            putBoolean("subscribeWarning", subscribeWarning)
+            putBoolean("subscribeNewsletter", subscribeNewsletter)
             putBoolean("isLoggedIn", true)
             apply()
         }
     }
+
+
 
     private fun showToast(msg: String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
