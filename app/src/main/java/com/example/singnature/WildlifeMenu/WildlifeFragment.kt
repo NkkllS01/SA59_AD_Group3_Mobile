@@ -178,6 +178,8 @@ class WildlifeFragment : Fragment() {
             override fun onResponse(call: Call<ClassificationResponse>, response: Response<ClassificationResponse>) {
                 Log.d("API Response", "HTTP Code: ${response.code()}")
 
+                val textResult = view?.findViewById<TextView>(R.id.text_result)
+
                 if (response.isSuccessful) {
                     val result = response.body()
                     Log.d("API Response", "Success: $result")
@@ -193,7 +195,6 @@ class WildlifeFragment : Fragment() {
 
                         // Update TextView with the result
                         requireActivity().runOnUiThread {
-                            val textResult = view?.findViewById<TextView>(R.id.text_result)
                             textResult?.text = resultText.toString()
                         }
                     } else {
@@ -203,7 +204,7 @@ class WildlifeFragment : Fragment() {
                 } else {
                     val errorBody = response.errorBody()?.string() ?: "Unknown Error"
                     Log.e("API Response", "Failure: ${response.errorBody()?.string()}")
-                    Toast.makeText(context, "Failed to upload image", Toast.LENGTH_SHORT).show()
+                    textResult?.text = "No species detected."
                 }
             }
 
