@@ -103,6 +103,15 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
             Glide.with(this)
                 .load(it.imageUrl)
                 .into(binding.sightingImageView)
+
+            moveMapToLocation()
+        }
+    }
+
+    private fun moveMapToLocation() {
+        sighting?.let {
+            val latLng = LatLng(it.latitude, it.longitude)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
         }
     }
 
@@ -111,10 +120,8 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
 
         googleMap.uiSettings.isScrollGesturesEnabled = false
         googleMap.uiSettings.isZoomGesturesEnabled = true
-
-        val latLng: LatLng? = sighting?.let { LatLng(it.latitude,it.longitude) }
-        latLng?.let { CameraUpdateFactory.newLatLngZoom(it,12f) }?.let { map.moveCamera(it) }
     }
+
     override fun onResume() {
         super.onResume()
         mapView.onResume()
@@ -134,4 +141,6 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
         super.onLowMemory()
         mapView.onLowMemory()
     }
+
+
 }

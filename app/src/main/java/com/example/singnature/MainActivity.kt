@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.wildlifeMapsFragment -> {
                     if (navController.currentDestination?.id != R.id.wildlifeMapsFragment) {
-                        navController.popBackStack(R.id.wildlifeMapsFragment, false)
+                        navController.navigate(R.id.wildlifeMapsFragment)
                     }
                     true
                 }

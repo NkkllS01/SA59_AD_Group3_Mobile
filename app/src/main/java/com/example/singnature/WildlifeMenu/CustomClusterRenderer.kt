@@ -16,6 +16,25 @@ class CustomClusterRenderer(
     private val context: Context, map: GoogleMap, clusterManager: ClusterManager<Sightings>
 ) : DefaultClusterRenderer<Sightings>(context, map, clusterManager) {
 
+    init {
+        clusterManager.setOnClusterClickListener { cluster ->
+            zoomIntoCluster(map, cluster)
+            true
+        }
+    }
+
+    private fun zoomIntoCluster(map: GoogleMap, cluster: Cluster<Sightings>) {
+        val builder = com.google.android.gms.maps.model.LatLngBounds.builder()
+        for (item in cluster.items) {
+            builder.include(item.position)
+        }
+
+        val bounds = builder.build()
+        val padding = 100
+
+        map.animateCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngBounds(bounds, padding))
+    }
+
     override fun onBeforeClusterRendered(cluster: Cluster<Sightings>, markerOptions: com.google.android.gms.maps.model.MarkerOptions) {
         val icon = getClusterIcon(cluster)
         markerOptions.icon(icon)

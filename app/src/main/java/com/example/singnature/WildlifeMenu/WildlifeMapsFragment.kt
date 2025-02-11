@@ -153,7 +153,9 @@ class WildlifeMapsFragment : Fragment() {
                 location ->
             if(location != null) {
                 currentLocation = location
-                initMap()
+                if (view != null && isAdded) {
+                    initMap()
+                }
             } else {
                 println("ERROR: Could not retrieve location")
             }

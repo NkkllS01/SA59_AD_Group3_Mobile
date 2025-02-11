@@ -1,0 +1,69 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:gravity="center_vertical">
+
+    <!-- Park Info Section -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/parkName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Park Name"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Region & Type in a Horizontal Layout -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/parkRegion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Region"
+                android:textColor="#666666"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:text=" | "
+                android:textColor="#666666"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/parkType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type"
+                android:textColor="#666666"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Navigation Icon -->
+    <ImageView
+        android:id="@+id/navigationIcon"
+        android:layout_width="58dp"
+        android:layout_height="62dp"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:contentDescription="Navigate to Map"
+        android:focusable="true"
+        android:src="@drawable/navigation_icon" />
+
+</LinearLayout>

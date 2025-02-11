@@ -9,7 +9,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.NavHostFragment.Companion
 import androidx.navigation.fragment.findNavController
+import com.example.singnature.ExploreMenu.ParkListFragmentDirections
 import com.example.singnature.R
 
 class SpeciesListFragment : Fragment() {
@@ -49,14 +52,14 @@ class SpeciesListFragment : Fragment() {
         speciesViewModel.speciesList.observe(viewLifecycleOwner) { speciesList ->
             if (speciesList.isNotEmpty()) {
                 // Set the adapter when the species list is updated
-                speciesListView.adapter = SpeciesSearchResultsAdapter(requireContext(), speciesList) { selectedSpecies ->
-                    val action = SpeciesListFragmentDirections
-                        .actionSpeciesListFragmentToSpeciesDetailFragment(selectedSpecies.specieId)
-                    findNavController().navigate(action)
-                }
+                speciesListView.adapter =
+                    SpeciesSearchResultsAdapter(requireContext(), speciesList) { selectedSpecies ->
+                        val action = SpeciesListFragmentDirections
+                            .actionSpeciesListFragmentToSpeciesDetailFragment(selectedSpecies.specieId)
+                        findNavController().navigate(action)
+                    }
             } else {
                 speciesListView.adapter = null
-                Toast.makeText(requireContext(), "No species found.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -75,7 +78,6 @@ class SpeciesListFragment : Fragment() {
             val action = SpeciesListFragmentDirections
                 .actionSpeciesListFragmentToSpeciesDetailFragment(specieId)
             findNavController().navigate(action)
-
         }
     }
 }

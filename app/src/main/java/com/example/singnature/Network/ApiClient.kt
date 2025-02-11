@@ -1,5 +1,6 @@
 package com.example.singnature.Network
 
+import com.example.singnature.Network.AuthService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -63,5 +64,9 @@ object ApiClient {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
+    val authService: AuthService by lazy {
+        instance.create(AuthService::class.java)
+    }
+
 
 }
