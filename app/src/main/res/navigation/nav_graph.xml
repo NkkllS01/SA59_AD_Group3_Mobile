@@ -90,6 +90,9 @@
         <action
             android:id="@+id/action_searchResultFragment_to_sightingFragment"
             app:destination="@id/sightingFragment" />
+        <action
+            android:id="@+id/action_searchResultFragment_to_wildlifeFragment"
+            app:destination="@id/wildlifeFragment"/>
     </fragment>
 
     <fragment

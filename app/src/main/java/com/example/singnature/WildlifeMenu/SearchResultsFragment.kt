@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.SearchView
 import android.widget.TextView
@@ -34,6 +35,12 @@ class SearchResultsFragment : Fragment() {
         val speciesListView = view.findViewById<ListView>(R.id.speciesListView)
         val sightingsHeader = view.findViewById<TextView>(R.id.sightingsHeader)
         val sightingsListView = view.findViewById<ListView>(R.id.sightingsListView)
+        val imageSearchButton = view.findViewById<ImageView>(R.id.cameraButton)
+
+        imageSearchButton?.setOnClickListener {
+            val action = SearchResultsFragmentDirections.actionSearchResultFragmentToWildlifeFragment()
+            findNavController().navigate(action)
+        }
 
         searchViewModel.speciesList.observe(viewLifecycleOwner) { speciesList ->
             if (speciesList.isNotEmpty()) {

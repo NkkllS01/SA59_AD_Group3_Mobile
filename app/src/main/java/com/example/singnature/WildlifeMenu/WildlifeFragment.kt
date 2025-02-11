@@ -189,6 +189,7 @@ class WildlifeFragment : Fragment() {
                 Log.d("API Response", "HTTP Code: ${response.code()}")
 
                 val textResult = view?.findViewById<TextView>(R.id.text_result)
+                val viewResult = view?.findViewById<Button>(R.id.btn_view_results)
 
                 if (response.isSuccessful) {
                     val result = response.body()
@@ -200,17 +201,20 @@ class WildlifeFragment : Fragment() {
                         resultText.append("Detected Species:\n\n")
 
                         result.species.forEachIndexed { index, speciesName ->
-                            resultText.append("${index + 1}, $speciesName\n")
+                            resultText.append("${index + 1}. $speciesName\n")
                         }
 
                         // Update TextView with the result
                         requireActivity().runOnUiThread {
                             textResult?.text = resultText.toString()
+                            viewResult?.visibility = View.VISIBLE
                         }
 
                         val speciesString = result.species.joinToString(", ")
                         searchViewModel.searchByKeyword(speciesString)
-                        navigateToSearchResults()
+                        viewResult?.setOnClickListener {
+                            navigateToSearchResults()
+                        }
                     } else {
                         Log.e("API Response", "No species detected.")
                         Toast.makeText(context, "Invalid response received", Toast.LENGTH_SHORT).show()
