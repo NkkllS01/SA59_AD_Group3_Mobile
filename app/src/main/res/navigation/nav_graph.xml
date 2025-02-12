@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">>
+    app:startDestination="@id/wildlifeMapsFragment">
 
     <fragment
         android:id="@+id/warningFragment"
@@ -15,6 +15,10 @@
         android:id="@+id/exploreFragment"
         android:name="com.example.singnature.ExploreMenu.ExploreFragment"
         android:label="Explore">
+        <action
+            android:id="@+id/action_ExploreFragment_to_ParkListFragment"
+            app:destination="@id/parkListFragment">
+        </action>
     </fragment>
 
     <fragment
@@ -37,6 +41,19 @@
             app:popUpTo="@id/wildlifeMapsFragment"
             app:popUpToInclusive="false" >
         </action>
+        <action
+            android:id="@+id/action_WildlifeMapsFragment_to_WildlifeFragment"
+            app:destination="@id/wildlifeFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/wildlifeFragment"
+        android:name="com.example.singnature.WildlifeMenu.WildlifeFragment">
+        <action
+            android:id="@+id/action_WildlifeFragment_to_SearchResultsFragment"
+            app:destination="@id/searchResultsFragment"
+            app:popUpTo="@id/wildlifeMapsFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
@@ -73,6 +90,9 @@
         <action
             android:id="@+id/action_searchResultFragment_to_sightingFragment"
             app:destination="@id/sightingFragment" />
+        <action
+            android:id="@+id/action_searchResultFragment_to_wildlifeFragment"
+            app:destination="@id/wildlifeFragment"/>
     </fragment>
 
     <fragment
@@ -105,7 +125,7 @@
     <fragment
         android:id="@+id/speciesListFragment"
         android:name="com.example.singnature.WildlifeMenu.SpeciesListFragment"
-        android:label="Species List" >
+        android:label="Species List">
         <action
             android:id="@+id/action_speciesListFragment_to_speciesDetailFragment"
             app:destination="@+id/speciesDetailFragment"/>
@@ -119,5 +139,39 @@
             android:name="specieId"
             app:argType="integer"/>
     </fragment>
+
+    <fragment
+            android:id="@+id/parkListFragment"
+            android:name="com.example.singnature.ExploreMenu.ParkListFragment"
+            android:label="Park List">
+            <action
+                android:id="@+id/action_parkListFragment_to_parkMapFragment"
+                app:destination="@id/parkMapFragment"/>
+            <action
+                android:id="@+id/action_parkListFragment_to_parkDetailFragment"
+                app:destination="@id/parkDetailFragment">
+                <argument
+                    android:name="parkId"
+                    app:argType="integer"/>
+            </action>
+        </fragment>
+
+        <fragment
+            android:id="@+id/parkDetailFragment"
+            android:name="com.example.singnature.ExploreMenu.ParkDetailFragment"
+            android:label="Park Detail">
+            <argument
+                android:name="parkId"
+                app:argType="integer" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/parkMapFragment"
+            android:name="com.example.singnature.ExploreMenu.ParkMapFragment"
+            android:label="Park Map">
+            <argument
+                android:name="park"
+                app:argType="com.example.singnature.ExploreMenu.Park" />
+        </fragment>
 
 </navigation>

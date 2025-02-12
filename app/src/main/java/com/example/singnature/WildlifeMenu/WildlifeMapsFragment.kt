@@ -117,22 +117,22 @@ class WildlifeMapsFragment : Fragment() {
             }
         })
 
-        /* cameraIcon.setOnClickListener {
-            findNavController().navigate(R.id.action_WildlifeMapsFragment_to_TBC)
+        cameraIcon = view.findViewById(R.id.cameraButton)
+        cameraIcon.setOnClickListener {
+            findNavController().navigate(R.id.action_WildlifeMapsFragment_to_WildlifeFragment)
         }
-        */
 
         val btn_Wildlife: Button = requireView().findViewById(R.id.btn_wildlife)
         btn_Wildlife.setOnClickListener {
             findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SpeciesCategoryFragment)
         }
     }
-        /*
-        val btn_NewSighting: Button = requireView().findViewById(R.id.btn_newSighting)
-        btn_NewSighting.setOnClickListener {
-            findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SightingFragment)
-        }
-    */
+    /*
+    val btn_NewSighting: Button = requireView().findViewById(R.id.btn_newSighting)
+    btn_NewSighting.setOnClickListener {
+        findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SightingFragment)
+    }
+*/
 
     private fun getCurrentLocationUser() {
         if(ActivityCompat.checkSelfPermission(
@@ -153,7 +153,9 @@ class WildlifeMapsFragment : Fragment() {
                 location ->
             if(location != null) {
                 currentLocation = location
-                initMap()
+                if (view != null && isAdded) {
+                    initMap()
+                }
             } else {
                 println("ERROR: Could not retrieve location")
             }

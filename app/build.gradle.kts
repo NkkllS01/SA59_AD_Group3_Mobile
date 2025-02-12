@@ -77,4 +77,5 @@ dependencies {
     implementation("com.google.maps.android:android-maps-utils:3.4.0")
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("com.github.bumptech.glide:glide:4.15.1")
+    implementation("com.google.android.gms:play-services-cronet:18.0.1")
 }

@@ -5,7 +5,7 @@ data class RegisterRequest(
     val username: String,
     val password: String,
     val email: String?,
-    val phone: String?,
-    val subscribeWarning: Boolean = false,
-    val subscribeNewsletter: Boolean = false
+    val mobile: String?,
+    val warning: Boolean = false,
+    val newsletter: Boolean = false
 )
