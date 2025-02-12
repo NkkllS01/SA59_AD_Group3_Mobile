@@ -12,7 +12,7 @@ import java.util.Date
 data class Sightings (
     val sightingId: Int,
     val userId: Int,
-    val userName: String,
+    var userName: String,
     @JsonAdapter(DateJsonAdapter::class)
     val date: Date,
     val specieId: Int,
