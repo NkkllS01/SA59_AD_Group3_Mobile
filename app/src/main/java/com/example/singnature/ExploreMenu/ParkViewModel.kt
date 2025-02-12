@@ -12,13 +12,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ParkViewModel : ViewModel() {
-    private val _parkList = MutableLiveData<List<Park>>()  // List of parks
+    private val _parkList = MutableLiveData<List<Park>>()
     val parkList: LiveData<List<Park>> get() = _parkList
 
-    private val _parkDetail = MutableLiveData<Park>()  // Single park
+    private val _parkDetail = MutableLiveData<Park>()
     val parkDetail: LiveData<Park> get() = _parkDetail
 
-    // Fetch all parks
     fun getAllParks() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -44,7 +43,6 @@ class ParkViewModel : ViewModel() {
         }
     }
 
-    // Fetch park detail by ID
     fun fetchParkDetail(parkId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
