@@ -127,12 +127,12 @@ class WildlifeMapsFragment : Fragment() {
             findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SpeciesCategoryFragment)
         }
     }
-        /*
-        val btn_NewSighting: Button = requireView().findViewById(R.id.btn_newSighting)
-        btn_NewSighting.setOnClickListener {
-            findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SightingFragment)
-        }
-    */
+    /*
+    val btn_NewSighting: Button = requireView().findViewById(R.id.btn_newSighting)
+    btn_NewSighting.setOnClickListener {
+        findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SightingFragment)
+    }
+*/
 
     private fun getCurrentLocationUser() {
         if(ActivityCompat.checkSelfPermission(
