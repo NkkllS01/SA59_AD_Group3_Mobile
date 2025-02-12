@@ -21,6 +21,36 @@
         android:id="@+id/warningFragment"
         android:name="com.example.singnature.WarningMenu.WarningFragment"
         android:label="Warning">
+        <action
+            android:id="@+id/action_WarningFragment_to_WarningListFragment"
+            app:destination="@+id/warningListFragment">
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/warningListFragment"
+        android:name="com.example.singnature.WarningMenu.WarningListFragment"
+        android:label="Warning List">
+        <action
+            android:id="@+id/action_WarningListFragment_to_SightingFragment"
+            app:destination="@id/sightingFragment">
+        </action>
+        <action
+            android:id="@+id/action_WarningListFragment_to_WarningDetailFragment"
+            app:destination="@+id/warningDetailFragment">
+            <argument
+                android:name="warningId"
+                app:argType="integer"/>
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/warningDetailFragment"
+        android:name="com.example.singnature.WarningMenu.WarningDetailFragment"
+        android:label="Warning Detail">
+        <argument
+            android:name="warningId"
+            app:argType="integer" />
     </fragment>
 
     <fragment

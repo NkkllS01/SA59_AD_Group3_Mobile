@@ -9,10 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.NavHostFragment.Companion
 import androidx.navigation.fragment.findNavController
-import com.example.singnature.ExploreMenu.ParkListFragmentDirections
 import com.example.singnature.R
 
 class SpeciesListFragment : Fragment() {
