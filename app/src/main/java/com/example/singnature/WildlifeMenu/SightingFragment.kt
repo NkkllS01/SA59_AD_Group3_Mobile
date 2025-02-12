@@ -104,7 +104,7 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
                 .load(it.imageUrl)
                 .into(binding.sightingImageView)
 
-            moveMapToLocation()
+           moveMapToLocation()
         }
     }
 
@@ -121,7 +121,6 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
         googleMap.uiSettings.isScrollGesturesEnabled = false
         googleMap.uiSettings.isZoomGesturesEnabled = true
     }
-
     override fun onResume() {
         super.onResume()
         mapView.onResume()
@@ -141,6 +140,4 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
         super.onLowMemory()
         mapView.onLowMemory()
     }
-
-
 }
