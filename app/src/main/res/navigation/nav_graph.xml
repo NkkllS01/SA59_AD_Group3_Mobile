@@ -120,4 +120,13 @@
             app:argType="integer"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/reportSightingFragment"
+        android:name="com.example.singnature.WildlifeMenu.ReportSightingFragment"
+        android:label="Report Sighting">
+        <action
+        android:id="@+id/action_reportSightingFragment_to_loginFragment"
+        app:destination="@id/loginFragment" />
+    </fragment>
+
 </navigation>
