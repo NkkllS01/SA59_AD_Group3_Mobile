@@ -4,8 +4,8 @@ data class LoginResponse(
     val userId: Int,
     val username: String,
     val email: String?,
-    val phone: String?,
-    val subscribeWarning: Boolean,
-    val subscribeNewsletter: Boolean
+    val mobile: String?,
+    val warning: Boolean,
+    val newsletter: Boolean
 )
 

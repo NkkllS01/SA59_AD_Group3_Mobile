@@ -68,18 +68,18 @@ class LoginFragment : Fragment() {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
-                    println("DEBUG: API Response -> userId=${loginResponse?.userId}, email=${loginResponse?.email}, phone=${loginResponse?.phone}, subscribeWarning=${loginResponse?.subscribeWarning}, subscribeNewsletter=${loginResponse?.subscribeNewsletter}")
+                    println("DEBUG: API Response -> userId=${loginResponse?.userId}, email=${loginResponse?.email}, mobile=${loginResponse?.mobile}, warning=${loginResponse?.warning}, newsletter=${loginResponse?.newsletter}")
 
                     loginResponse?.let {
-                        println("DEBUG: API Response -> userId=${it.userId}, email=${it.email}, phone=${it.phone}, subscribeWarning=${it.subscribeWarning}, subscribeNewsletter=${it.subscribeNewsletter}")
+                        println("DEBUG: API Response -> userId=${it.userId}, email=${it.email}, mobile=${it.mobile}, warning=${it.warning}, newsletter=${it.newsletter}")
 
                         saveLoginDetails(
                             username = username,
                             userId = it.userId,
                             email = it.email,
-                            phone = it.phone,
-                            subscribeWarning = it.subscribeWarning,
-                            subscribeNewsletter = it.subscribeNewsletter
+                            mobile = it.mobile,
+                            warning = it.warning,
+                            newsletter = it.newsletter
                         )
                         showToast("Login successful")
                         Navigation.findNavController(requireView()).navigate(R.id.userFragment)
@@ -96,14 +96,14 @@ class LoginFragment : Fragment() {
     }
 
 
-    private fun saveLoginDetails(username: String, userId: Int, email: String?, phone: String?, subscribeWarning: Boolean, subscribeNewsletter: Boolean) {
+    private fun saveLoginDetails(username: String, userId: Int, email: String?, mobile: String?, warning: Boolean, newsletter: Boolean) {
         with(sharedPref.edit()) {
             putString("username", username)
             putInt("userId", userId)
             putString("email", email ?: "")
-            putString("phone", phone ?: "")
-            putBoolean("subscribeWarning", subscribeWarning)
-            putBoolean("subscribeNewsletter", subscribeNewsletter)
+            putString("mobile", mobile ?: "")
+            putBoolean("warning", warning)
+            putBoolean("newsletter", newsletter)
             putBoolean("isLoggedIn", true)
             apply()
         }
