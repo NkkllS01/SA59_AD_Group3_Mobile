@@ -65,7 +65,7 @@ class RegisterFragment : Fragment() {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 if (response.isSuccessful) {
                     showToast("Registration successful")
-                    binding.root.findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+                    binding.root.findNavController().navigate(R.id.userFragment)
                 } else {
                     showToast("Registration failed: ${response.message()}")
                 }
