@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class Species (
     val specieId: Int,
     val specieName: String,
+    val imageUrl: String,
     val description: String,
     val highlights: String,
     val categoryId: Int,
