@@ -1,5 +1,7 @@
 package com.example.singnature.UserMenu
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,12 +25,14 @@ class RegisterFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var authService: AuthService
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        sharedPref = requireActivity().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
 
         authService = ApiClient.authService
 
@@ -46,7 +50,7 @@ class RegisterFragment : Fragment() {
                 val password = passwordEditText.text.toString().trim()
 
                 if (username.isEmpty() || password.isEmpty()) {
-                    showToast("Username and password cannot be empty")
+                    showToast("username and password can not be empty")
                     return@setOnClickListener
                 }
 
@@ -63,18 +67,44 @@ class RegisterFragment : Fragment() {
     private fun registerUser(request: RegisterRequest) {
         authService.register(request).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
-                if (response.isSuccessful) {
-                    showToast("Registration successful")
-                    binding.root.findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+                if (response.isSuccessful && response.body() != null) {
+                    val user = response.body()!!
+                    showToast("注册成功")
+
+                    // 保存用户登录信息
+                    saveLoginDetails(
+                        username = request.username,
+                        userId = user.userId,
+                        email = user.email,
+                        mobile = user.mobile,
+                        warning = user.warning,
+                        newsletter = user.newsletter
+                    )
+
+                    // 跳转到 UserFragment
+                    binding.root.findNavController().navigate(R.id.action_registerFragment_to_userFragment)
                 } else {
-                    showToast("Registration failed: ${response.message()}")
+                    showToast("register filed: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                showToast("Network error: ${t.message}")
+                showToast("network error: ${t.message}")
             }
         })
+    }
+
+    private fun saveLoginDetails(username: String, userId: Int, email: String?, mobile: String?, warning: Boolean, newsletter: Boolean) {
+        with(sharedPref.edit()) {
+            putString("username", username)
+            putInt("userId", userId)
+            putString("email", email ?: "")
+            putString("mobile", mobile ?: "")
+            putBoolean("warning", warning)
+            putBoolean("newsletter", newsletter)
+            putBoolean("isLoggedIn", true)
+            apply()
+        }
     }
 
     private fun showToast(msg: String) {

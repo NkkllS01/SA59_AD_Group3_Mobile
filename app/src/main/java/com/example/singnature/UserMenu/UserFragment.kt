@@ -68,7 +68,7 @@ class UserFragment : Fragment() {
     private fun setupListeners() {
         binding.apply {
             saveButton.setOnClickListener {
-                val userId = sharedPref.getInt("userId", -1) // 确保拿到 userId
+                val userId = sharedPref.getInt("userId", -1)
                 if (userId == -1) {
                     showToast("User ID not found, please login again.")
                     return@setOnClickListener
