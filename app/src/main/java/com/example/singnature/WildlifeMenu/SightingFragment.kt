@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.singnature.Network.sightingsApiService
-import com.example.singnature.R
 import com.example.singnature.databinding.FragmentSightingBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -112,6 +112,7 @@ class SightingFragment : Fragment(), OnMapReadyCallback {
         sighting?.let {
             val latLng = LatLng(it.latitude, it.longitude)
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
+            googleMap.addMarker(MarkerOptions().position(latLng).title("Your Location"))
         }
     }
 
