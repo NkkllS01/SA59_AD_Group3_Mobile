@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -53,9 +54,8 @@ class WarningListFragment : Fragment(), OnWarningClickListener {
                 findNavController().navigate(action)
             }
             "DENGUE" -> {
-                val action = WarningListFragmentDirections
-                    .actionWarningListFragmentToWarningDetailFragment(warningId)
-                findNavController().navigate(action)
+                    // Optionally show a toast message for Dengue
+                    Toast.makeText(context, "Dengue alert!", Toast.LENGTH_SHORT).show()
             }
         }
     }
