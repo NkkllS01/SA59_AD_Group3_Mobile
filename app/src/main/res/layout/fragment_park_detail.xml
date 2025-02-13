@@ -23,6 +23,13 @@
         android:src="@drawable/image_placeholder" />
 
     <TextView
+        android:id="@+id/openingHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Opening Hours"
+        android:paddingTop="4dp" />
+
+    <TextView
         android:id="@+id/parkDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

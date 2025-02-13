@@ -34,7 +34,7 @@ class WarningDetailFragment : Fragment() {
         warningViewModel.fetchWarningDetail(warningId)
 
         warningViewModel.warningDetail.observe(viewLifecycleOwner) { warning ->
-            descriptionTextView.text = warning.description
+           // descriptionTextView.text = warning.description
 
         }
     }
