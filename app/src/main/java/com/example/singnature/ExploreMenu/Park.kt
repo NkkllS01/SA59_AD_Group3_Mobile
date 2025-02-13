@@ -9,7 +9,9 @@ data class Park (
     val parkName: String,
     val parkRegion: String,
     val parkType: String,
+    val imageUrl: String,
     val parkDescription: String,
+    val openingHours: String,
     val latitude: Double,
     val longitude: Double
 ) : Parcelable

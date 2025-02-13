@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.singnature.ExploreMenu.ExploreFragmentDirections
 import com.example.singnature.R
 
 class WarningFragment : Fragment() {

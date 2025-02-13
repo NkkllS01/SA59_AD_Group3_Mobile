@@ -13,6 +13,7 @@ class ParkDetailFragment : Fragment() {
     private val parkViewModel: ParkViewModel by activityViewModels()
 
     private lateinit var parkNameTextView: TextView
+    private lateinit var openingHoursTextView: TextView
     private lateinit var descriptionTextView: TextView
 
     private var parkId: Int = -1
@@ -29,6 +30,7 @@ class ParkDetailFragment : Fragment() {
         // Initialize views
         parkNameTextView = view.findViewById(R.id.parkName)
         descriptionTextView = view.findViewById(R.id.parkDescription)
+        openingHoursTextView = view.findViewById(R.id.openingHours)
 
         val args = ParkDetailFragmentArgs.fromBundle(requireArguments())
         parkId = args.parkId
