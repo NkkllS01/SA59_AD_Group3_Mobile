@@ -24,6 +24,8 @@ class ParkAdapter(
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_park, parent, false)
         val park = getItem(position)
 
+        Log.d("ParkAdapter", "Rendering park ID: ${park.parkId}, Name: ${park.parkName}, Region: ${park.parkRegion}, Type: ${park.parkType}")
+
         val nameTextView = view.findViewById<TextView>(R.id.parkName)
         val regionTextView = view.findViewById<TextView>(R.id.parkRegion)
         val typeTextView = view.findViewById<TextView>(R.id.parkType)
@@ -35,9 +37,12 @@ class ParkAdapter(
 
         view.setOnClickListener {
             Log.d("ParkAdapter", "Clicked park ${park.parkId}")
-            val action =
-                ParkListFragmentDirections.actionParkListFragmentToParkDetailFragment(park.parkId)
-            navController.navigate(action)
+            if (park.parkId != null) {
+                val action = ParkListFragmentDirections.actionParkListFragmentToParkDetailFragment(park.parkId)
+                navController.navigate(action)
+            } else {
+                Log.e("ParkAdapter", "Error: parkId is null, cannot navigate!")
+            }
         }
         // Set up click listener for the navigation icon (opens Google Maps within the app)
         navIcon.setOnClickListener {

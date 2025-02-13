@@ -47,11 +47,15 @@ class SightingBottomSheetFragment : BottomSheetDialogFragment() {
         titleTextView.text = sightingTitle
         userTextView.text = "Reported by: $sightingUser"
 
-        Glide.with(this)
-            .load(sightingImageUrl)
-            .placeholder(R.drawable.image_placeholder)
-            .error(R.drawable.image_placeholder)
-            .into(sightingImageView)
+        if (!sightingImageUrl.isNullOrEmpty()) {
+            Glide.with(this)
+                .load(sightingImageUrl)
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .into(sightingImageView)
+        } else {
+            sightingImageView.setImageResource(R.drawable.image_placeholder)
+        }
 
         viewDetailsTextView.setOnClickListener {
             sightingId?.let { id ->

@@ -1,12 +1,14 @@
 package com.example.singnature.WildlifeMenu
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.singnature.R
 
 class SightingsSearchResultsAdapter (
@@ -28,8 +30,20 @@ class SightingsSearchResultsAdapter (
         val item = getItem(position)
 
         textView.text = item.specieName
-        imageView.setImageResource(R.drawable.image_placeholder)
         reportByText.text = "Reported by: ${item.userName}"
+
+        Log.d("SightingsAdapter", "Image URL: ${item.imageUrl}")
+
+        if (!item.imageUrl.isNullOrEmpty()) {
+            Glide.with(context)
+                .load(item.imageUrl)
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_placeholder)
+                .into(imageView)
+        } else {
+            Log.d("SightingsAdapter", "Using placeholder for Sighting ID: ${item.sightingId}")
+            imageView.setImageResource(R.drawable.image_placeholder)
+        }
 
         return view
     }
