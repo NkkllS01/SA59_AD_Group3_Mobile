@@ -236,6 +236,7 @@ class WildlifeMapsFragment : Fragment() {
             putInt("sightingId", sighting.sightingId)
             putString("sightingTitle", sighting.specieName)
             putString("sightingUser", sighting.userName)
+            putString("sightingImageUrl", sighting.imageUrl)
         }
 
         val bottomSheet = SightingBottomSheetFragment()
