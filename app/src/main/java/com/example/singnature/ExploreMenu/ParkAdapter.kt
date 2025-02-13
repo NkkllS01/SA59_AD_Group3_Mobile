@@ -26,10 +26,12 @@ class ParkAdapter(
 
         val nameTextView = view.findViewById<TextView>(R.id.parkName)
         val regionTextView = view.findViewById<TextView>(R.id.parkRegion)
+        val typeTextView = view.findViewById<TextView>(R.id.parkType)
         val navIcon = view.findViewById<ImageView>(R.id.navigationIcon)
 
         nameTextView.text = park.parkName
         regionTextView.text = park.parkRegion
+        typeTextView.text = park.parkType
 
         view.setOnClickListener {
             Log.d("ParkAdapter", "Clicked park ${park.parkId}")
