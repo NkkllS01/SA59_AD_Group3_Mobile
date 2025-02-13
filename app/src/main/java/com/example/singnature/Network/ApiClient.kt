@@ -13,7 +13,7 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 object ApiClient {
-    private const val BASE_URL = "https://10.0.2.2:5076/api/"
+    private const val BASE_URL = "https://167.172.73.161/api/"
 
     private fun getUnsafeOkHttpClient(): OkHttpClient {
         return try {
@@ -43,7 +43,7 @@ object ApiClient {
 
             OkHttpClient.Builder()
                 .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
-                .hostnameVerifier { hostname, _ -> hostname == "10.0.2.2" || hostname == "localhost" }
+                .hostnameVerifier {  _, _ -> true }
                 .addInterceptor(HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 })

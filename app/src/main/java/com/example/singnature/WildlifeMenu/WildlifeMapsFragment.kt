@@ -40,7 +40,7 @@ class WildlifeMapsFragment : Fragment() {
     private lateinit var searchView: SearchView
     private lateinit var cameraIcon: ImageView
     private lateinit var btn_Wildlife: Button
-    //private lateinit btn_NewSighting: Button //
+    private lateinit var btn_NewSighting: Button
     private val viewModel: WildlifeMapViewModel by activityViewModels()
     private val searchViewModel: SearchViewModel by activityViewModels()
 
@@ -115,13 +115,12 @@ class WildlifeMapsFragment : Fragment() {
         btn_Wildlife.setOnClickListener {
             findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SpeciesCategoryFragment)
         }
+
+        val btn_NewSighting: Button = requireView().findViewById(R.id.btn_newSighting)
+        btn_NewSighting.setOnClickListener {
+            findNavController().navigate(R.id.action_WildlifeMapsFragment_to_ReportSightingFragment)
+        }
     }
-    /*
-    val btn_NewSighting: Button = requireView().findViewById(R.id.btn_newSighting)
-    btn_NewSighting.setOnClickListener {
-        findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SightingFragment)
-    }
-*/
 
     private fun getCurrentLocationUser() {
         if (ActivityCompat.checkSelfPermission(
