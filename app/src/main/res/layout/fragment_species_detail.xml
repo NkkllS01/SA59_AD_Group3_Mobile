@@ -7,36 +7,40 @@
 
     <TextView
         android:id="@+id/speciesName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Species Name"
-        android:textSize="24sp"
+        android:textColor="@android:color/white"
+        android:background="@drawable/bg_header"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:layout_gravity="center"
-        android:paddingTop="8dp" />
+        android:layout_marginBottom="16dp"/>
 
     <ImageView
         android:id="@+id/speciesImage"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/image_placeholder" />
+        android:src="@drawable/image_placeholder"
+        android:layout_marginBottom="10dp" />
 
     <TextView
         android:id="@+id/speciesDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Description goes here"
-        android:paddingTop="4dp" />
+        android:paddingTop="4dp"
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/speciesHighlight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Highlights" />
+        android:text="Highlights"
+        android:textSize="20sp" />
 
-    <!-- Progress Bar (hidden by default) -->
     <ProgressBar
         android:id="@+id/loadingProgressBar"
         android:layout_width="wrap_content"

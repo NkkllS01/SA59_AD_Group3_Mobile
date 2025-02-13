@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.singnature.R
 
 class SpeciesDetailFragment : Fragment() {
@@ -21,6 +23,7 @@ class SpeciesDetailFragment : Fragment() {
     private lateinit var descriptionTextView: TextView
     private lateinit var highlightsTextView: TextView
     private lateinit var loadingProgressBar: ProgressBar
+    private lateinit var speciesImageView: ImageView
 
     private var specieId: Int = -1
 
@@ -37,29 +40,32 @@ class SpeciesDetailFragment : Fragment() {
         descriptionTextView = view.findViewById(R.id.speciesDescription)
         highlightsTextView = view.findViewById(R.id.speciesHighlight)
         loadingProgressBar = view.findViewById(R.id.loadingProgressBar)
+        speciesImageView = view.findViewById(R.id.speciesImage)
 
-        // Retrieve specieId using the safe argument passing mechanism
         val args = SpeciesDetailFragmentArgs.fromBundle(requireArguments())
         specieId = args.specieId
 
-        // Check if specieId is valid
         if (specieId == -1) {
-            // Handle the error case where specieId is invalid or missing
             Toast.makeText(context, "Species ID not found", Toast.LENGTH_SHORT).show()
             findNavController().popBackStack()
             return
         }
 
-        // Fetch species details using the valid specieId
         speciesViewModel.fetchSpeciesDetail(specieId)
 
-        // Observe species detail and update UI
         speciesViewModel.speciesDetail.observe(viewLifecycleOwner) { specie ->
             specie?.let {
                 specieNameTextView.text = it.specieName
                 descriptionTextView.text = it.description
                 highlightsTextView.text = it.highlights
                 loadingProgressBar.visibility = View.GONE
+
+                Glide.with(this)
+                    .load(it.imageUrl)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
+                    .into(speciesImageView)
             }
         }
     }
