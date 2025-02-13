@@ -3,12 +3,54 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/wildlifeMapsFragment">
+    app:startDestination="@id/loadingFragment">
+
+    <fragment
+        android:id="@+id/loadingFragment"
+        android:name="com.example.singnature.WildlifeMenu.LoadingFragment"
+        android:label="LoadingFragment"
+        tools:layout="@layout/fragment_loading">
+        <action
+            android:id="@+id/action_LoadingFragment_to_WildlifeMapsFragment"
+            app:destination="@id/wildlifeMapsFragment"
+            app:popUpTo="@id/loadingFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
     <fragment
         android:id="@+id/warningFragment"
         android:name="com.example.singnature.WarningMenu.WarningFragment"
         android:label="Warning">
+        <action
+            android:id="@+id/action_WarningFragment_to_WarningListFragment"
+            app:destination="@+id/warningListFragment">
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/warningListFragment"
+        android:name="com.example.singnature.WarningMenu.WarningListFragment"
+        android:label="Warning List">
+        <action
+            android:id="@+id/action_WarningListFragment_to_SightingFragment"
+            app:destination="@id/sightingFragment">
+        </action>
+        <action
+            android:id="@+id/action_WarningListFragment_to_WarningDetailFragment"
+            app:destination="@+id/warningDetailFragment">
+            <argument
+                android:name="warningId"
+                app:argType="integer"/>
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/warningDetailFragment"
+        android:name="com.example.singnature.WarningMenu.WarningDetailFragment"
+        android:label="Warning Detail">
+        <argument
+            android:name="warningId"
+            app:argType="integer" />
     </fragment>
 
     <fragment
@@ -40,6 +82,10 @@
             app:destination="@id/sightingFragment"
             app:popUpTo="@id/wildlifeMapsFragment"
             app:popUpToInclusive="false" >
+        </action>
+        <action
+            android:id="@+id/action_WildlifeMapsFragment_to_ReportSightingFragment"
+            app:destination="@id/reportSightingFragment">
         </action>
         <action
             android:id="@+id/action_WildlifeMapsFragment_to_WildlifeFragment"
@@ -174,4 +220,12 @@
                 app:argType="com.example.singnature.ExploreMenu.Park" />
         </fragment>
 
+    <fragment
+        android:id="@+id/reportSightingFragment"
+        android:name="com.example.singnature.WildlifeMenu.ReportSightingFragment"
+        android:label="Report Sighting">
+        <action
+            android:id="@+id/action_reportSightingFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 </navigation>

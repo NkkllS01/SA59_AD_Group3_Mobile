@@ -1,5 +1,6 @@
 package com.example.singnature.WildlifeMenu
 
+import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.fragment.app.Fragment
@@ -39,7 +40,7 @@ class WildlifeMapsFragment : Fragment() {
     private lateinit var searchView: SearchView
     private lateinit var cameraIcon: ImageView
     private lateinit var btn_Wildlife: Button
-    //private lateinit btn_NewSighting: Button //
+    private lateinit var btn_NewSighting: Button
     private val viewModel: WildlifeMapViewModel by activityViewModels()
     private val searchViewModel: SearchViewModel by activityViewModels()
 
@@ -47,7 +48,6 @@ class WildlifeMapsFragment : Fragment() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val permissionCode = 1001
     private lateinit var mapFragment: SupportMapFragment
-    private lateinit var loadingLogo: ImageView
     private lateinit var clusterManager: ClusterManager<Sightings>
 
     private val callback = OnMapReadyCallback { googleMap ->
@@ -79,17 +79,6 @@ class WildlifeMapsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        loadingLogo = view.findViewById(R.id.loadingLogo)
-        if (viewModel.hasLogoBeenShown) {
-            loadingLogo.visibility = View.GONE
-        } else {
-            loadingLogo.visibility = View.VISIBLE
-            view.postDelayed({
-                loadingLogo.visibility = View.GONE
-                viewModel.hasLogoBeenShown = true
-            }, 3000)
-        }
 
         mapFragment =
             childFragmentManager.findFragmentById(R.id.wildlifeMapsFragment) as SupportMapFragment
@@ -126,39 +115,53 @@ class WildlifeMapsFragment : Fragment() {
         btn_Wildlife.setOnClickListener {
             findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SpeciesCategoryFragment)
         }
+
+        val btn_NewSighting: Button = requireView().findViewById(R.id.btn_newSighting)
+        btn_NewSighting.setOnClickListener {
+            findNavController().navigate(R.id.action_WildlifeMapsFragment_to_ReportSightingFragment)
+        }
     }
-    /*
-    val btn_NewSighting: Button = requireView().findViewById(R.id.btn_newSighting)
-    btn_NewSighting.setOnClickListener {
-        findNavController().navigate(R.id.action_WildlifeMapsFragment_to_SightingFragment)
-    }
-*/
 
     private fun getCurrentLocationUser() {
-        if(ActivityCompat.checkSelfPermission(
-                requireContext(),android.Manifest.permission.ACCESS_FINE_LOCATION) !=
-            PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
-            PackageManager.PERMISSION_GRANTED)
-        {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
             requestPermissions(
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                 permissionCode)
             return
         }
 
+        fusedLocationProviderClient.lastLocation
+            .addOnSuccessListener { location ->
+                if (location != null) {
+                    currentLocation = location
+                    if (view != null && isAdded) {
+                        initMap()
+                    }
+                } else {
+                    requestNewLocation()
+                }
+            }
+    }
+
+    private fun requestNewLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
         fusedLocationProviderClient.getCurrentLocation(
             com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY, null
-        ).addOnSuccessListener {
-                location ->
-            if(location != null) {
-                currentLocation = location
-                if (view != null && isAdded) {
-                    initMap()
-                }
-            } else {
-                println("ERROR: Could not retrieve location")
-            }
+        ).addOnSuccessListener { location ->
+            currentLocation = location
+            initMap()
         }
     }
 
@@ -166,7 +169,6 @@ class WildlifeMapsFragment : Fragment() {
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.wildlifeMapsFragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
-        loadingLogo.visibility = View.GONE
         mapFragment?.view?.visibility = View.VISIBLE
 
         val searchView: SearchView = requireView().findViewById(R.id.search)
