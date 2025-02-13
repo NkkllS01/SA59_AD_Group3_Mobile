@@ -21,7 +21,7 @@ data class Sightings (
     val imageUrl: String,
     val latitude: Double,
     val longitude: Double,
-    val status: String
+    //val status: SightingStatus
 ) : ClusterItem, Parcelable {
     override fun getPosition(): LatLng {
         return LatLng(latitude, longitude)
@@ -32,4 +32,8 @@ data class Sightings (
     override fun getZIndex(): Float? {
         return 1.0f
     }
+//    enum class SightingStatus {
+//        Active,
+//        Inactive
+//    }
 }
