@@ -84,6 +84,10 @@
             app:popUpToInclusive="false" >
         </action>
         <action
+            android:id="@+id/action_WildlifeMapsFragment_to_ReportSightingFragment"
+            app:destination="@id/reportSightingFragment">
+        </action>
+        <action
             android:id="@+id/action_WildlifeMapsFragment_to_WildlifeFragment"
             app:destination="@id/wildlifeFragment"/>
     </fragment>

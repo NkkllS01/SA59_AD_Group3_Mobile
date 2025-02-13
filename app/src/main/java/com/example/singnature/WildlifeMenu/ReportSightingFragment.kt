@@ -73,6 +73,8 @@ class ReportSightingFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        sharedPreferences = requireActivity().getSharedPreferences("MyPreferences", Activity.MODE_PRIVATE)
+
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
         if (!isLoggedIn) {
             findNavController().navigate(R.id.action_reportSightingFragment_to_loginFragment)
