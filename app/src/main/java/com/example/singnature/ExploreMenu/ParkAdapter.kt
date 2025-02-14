@@ -44,7 +44,7 @@ class ParkAdapter(
                 Log.e("ParkAdapter", "Error: parkId is null, cannot navigate!")
             }
         }
-        // Set up click listener for the navigation icon (opens Google Maps within the app)
+        
         navIcon.setOnClickListener {
             val action = ParkListFragmentDirections.actionParkListFragmentToParkMapFragment(park)
             navController.navigate(action)  // Use the passed NavController
