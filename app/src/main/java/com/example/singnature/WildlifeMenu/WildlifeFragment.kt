@@ -23,18 +23,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.singnature.Network.sightingsApiService
-import com.example.singnature.Network.speciesApiService
 import com.example.singnature.R
 import com.example.singnature.WildlifeMenu.imageSearch.ClassificationResponse
 import com.example.singnature.WildlifeMenu.imageSearch.RetrofitClient
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Response
 import retrofit2.Call
@@ -183,7 +177,8 @@ class WildlifeFragment : Fragment() {
         val filePart = MultipartBody.Part.createFormData("image", imageFile.name, requestBody)
 
         // Call the API
-        val call = RetrofitClient.instance.uploadImage(filePart)
+//        val call = RetrofitClient.instance.uploadImage(filePart)
+        val call = RetrofitClient.getInstance(requireContext()).uploadImage(filePart)
         call.enqueue(object : Callback<ClassificationResponse> {
             override fun onResponse(call: Call<ClassificationResponse>, response: Response<ClassificationResponse>) {
                 Log.d("API Response", "HTTP Code: ${response.code()}")
