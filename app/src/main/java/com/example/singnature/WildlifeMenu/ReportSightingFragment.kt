@@ -83,6 +83,7 @@ class ReportSightingFragment : Fragment(), OnMapReadyCallback {
 
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
         if (!isLoggedIn) {
+            sharedPreferences.edit().putBoolean("returnToReportSighting", true).apply()
             findNavController().navigate(R.id.action_reportSightingFragment_to_loginFragment)
         } else {
             val userName = sharedPreferences.getString("username", "").toString()
