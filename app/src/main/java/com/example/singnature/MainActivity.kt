@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         enableEdgeToEdge()
 
-        // Initialize SharedPreferences
         sharedPref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -61,7 +60,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.userFragment)
         )
 
-        // Setup BottomNavigationView
         binding.bottomNav.setupWithNavController(navController)
     }
 

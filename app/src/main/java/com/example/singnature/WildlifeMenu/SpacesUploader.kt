@@ -11,10 +11,10 @@ import java.io.File
 import java.lang.Exception
 
 class SpacesUploader(context: Context) {
-    private val SPACE_NAME = "image-database"  // 替换为你的 Spaces 名称
-    private val REGION = "sgp1"  // 替换为你的 DigitalOcean 服务器区域
-    private val ACCESS_KEY = "DO00FRF7V7HQZG6TKY6H"  // 替换为你的 Access Key
-    private val SECRET_KEY = "cefVRIpN/hYfDdiwfbDzTxaVgbJsuZccwnTES7JLuIw"  // 替换为你的 Secret Key
+    private val SPACE_NAME = "image-database" 
+    private val REGION = "sgp1"
+    private val ACCESS_KEY = "DO00FRF7V7HQZG6TKY6H"
+    private val SECRET_KEY = "cefVRIpN/hYfDdiwfbDzTxaVgbJsuZccwnTES7JLuIw"
 
     private val s3Client = AmazonS3Client(BasicAWSCredentials(ACCESS_KEY,SECRET_KEY))
 

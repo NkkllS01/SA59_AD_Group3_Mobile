@@ -33,19 +33,6 @@ class ParkListFragment : Fragment() {
             val adapter = ParkAdapter(requireContext(), parks, navController)  // Pass NavController to the adapter
             parkListView.adapter = adapter
         }
-
-        // Handle item clicks
-       /* parkListView.setOnItemClickListener { _, _, position, _ ->
-            val selectedPark = parkViewModel.parkList.value?.get(position)
-            val parkId = selectedPark?.parkId ?: return@setOnItemClickListener
-
-            Log.d("ParkListFragment", "Navigating to ParkDetailFragment with parkId: $parkId")
-
-            // Navigate to ParkDetailFragment with parkId
-            val action = ParkListFragmentDirections.actionParkListFragmentToParkDetailFragment(parkId)
-            navController.navigate(action)
-            */
-
-        }
     }
+}
 

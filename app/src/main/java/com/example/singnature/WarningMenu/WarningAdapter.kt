@@ -24,7 +24,6 @@ class WarningAdapter(
     private val listener: OnWarningClickListener
 ) : BaseAdapter() {
 
-    // Cache to store fetched species names
     private val specieNameCache = mutableMapOf<Int, String>()
 
     override fun getCount(): Int = warnings.size
@@ -46,10 +45,8 @@ class WarningAdapter(
 
         val warning = getItem(position)
 
-        // Set initial placeholder or loading text
         viewHolder.speciesOrTierTextView.text = "Loading..."
 
-        // Check the source of the warning
         when (warning.source) {
             "DENGUE" -> {
                 // If the source is "DENGUE", use tier (alertLevel)
@@ -70,7 +67,6 @@ class WarningAdapter(
                     // If the specieName is cached, set it directly
                     viewHolder.speciesOrTierTextView.text = "Specie: $cachedSpecieName"
                 } else {
-                    // Otherwise, make the API call to fetch the specieName
                     sightingsApiService.getSightingById(sightingId).enqueue(object : Callback<Sightings> {
                         override fun onResponse(call: Call<Sightings>, response: Response<Sightings>) {
                             if (response.isSuccessful) {
@@ -78,17 +74,14 @@ class WarningAdapter(
                                 val specieName = sighting?.specieName ?: "Unknown"
                                 val details = sighting?.details?: "No details available"
 
-                                // Cache the result
                                 specieNameCache[sightingId] = specieName
 
                                 val spannable = SpannableString("Specie:$specieName\nDetails:$details")
-                                // Remove bold from details (if any)
+                                
                                 spannable.setSpan(StyleSpan(Typeface.NORMAL), "Specie: $specieName".length, spannable.length, 0)
 
-                                // Set the TextView with the styled text
                                 viewHolder.speciesOrTierTextView.text = spannable
                             } else {
-                                // If the API call fails, show default text
                                 viewHolder.speciesOrTierTextView.text = "Specie: Unknown"
                             }
                         }
@@ -106,7 +99,6 @@ class WarningAdapter(
             }
         }
 
-        // Handle click event
         view.setOnClickListener {
             listener.onWarningClicked(warning.warningId, warning.source)
         }
