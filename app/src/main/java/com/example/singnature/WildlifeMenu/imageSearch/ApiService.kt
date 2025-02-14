@@ -8,7 +8,7 @@ import retrofit2.http.Part
 
 interface ApiService {
     @Multipart
-    @POST("api/Image/predict") // cloud prototype
-    //@POST("api/ImageApi/predict") // actual in SingNature Web app
+//     @POST("api/Image/predict") // cloud prototype
+    @POST("api/ImageApi/predict") // actual in SingNature Web app
     fun uploadImage(@Part file : MultipartBody.Part) : Call<ClassificationResponse>
 }
