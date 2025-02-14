@@ -17,6 +17,7 @@ import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.graphics.Typeface
 import android.text.style.ForegroundColorSpan
+import androidx.core.content.ContextCompat
 
 class WarningAdapter(
     private val context: Context,
@@ -54,6 +55,7 @@ class WarningAdapter(
                 val cluster = warning.cluster?: "Unknown location"
                 val dengueMessage = "There are dengue cases at $cluster. Please take precautions."
                 viewHolder.speciesOrTierTextView.append("\n$dengueMessage")
+                viewHolder.speciesOrTierTextView.setTextColor(ContextCompat.getColor(context, R.color.orange_dark))
             }
             "SIGHTING" -> {
                 // If the source is "SIGHTING", check if the specieName is cached or make the API call
@@ -77,8 +79,6 @@ class WarningAdapter(
                                 specieNameCache[sightingId] = specieName
 
                                 val spannable = SpannableString("Specie:$specieName\nDetails:$details")
-                                
-                                spannable.setSpan(StyleSpan(Typeface.NORMAL), "Specie: $specieName".length, spannable.length, 0)
 
                                 viewHolder.speciesOrTierTextView.text = spannable
                             } else {
