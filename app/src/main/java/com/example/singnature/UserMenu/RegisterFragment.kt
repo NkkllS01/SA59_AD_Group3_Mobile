@@ -71,7 +71,6 @@ class RegisterFragment : Fragment() {
                     val user = response.body()!!
                     showToast("register successful")
 
-                    // 保存用户登录信息
                     saveLoginDetails(
                         username = request.username,
                         userId = user.userId,
@@ -81,7 +80,6 @@ class RegisterFragment : Fragment() {
                         newsletter = user.newsletter
                     )
 
-                    // 跳转到 UserFragment
                     binding.root.findNavController().navigate(R.id.action_registerFragment_to_userFragment)
                 } else {
                     showToast("register filed: ${response.message()}")
