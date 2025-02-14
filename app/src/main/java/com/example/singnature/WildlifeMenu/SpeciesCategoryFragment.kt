@@ -36,7 +36,7 @@ class SpeciesCategoryFragment : Fragment() {
         categoryGridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val category = categories[position]
             val action = SpeciesCategoryFragmentDirections
-                .actionSpeciesCategoryFragmentToSpeciesListFragment(category.id, category.name)
+                .actionSpeciesCategoryFragmentToSpeciesListFragment(category.categoryId, category.categoryName)
             findNavController().navigate(action)
         }
 

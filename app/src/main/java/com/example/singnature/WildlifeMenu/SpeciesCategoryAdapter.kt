@@ -12,7 +12,7 @@ import com.example.singnature.WildlifeMenu.SpeciesCategory
 class SpeciesCategoryAdapter(private val context: Context, private val categories: List<SpeciesCategory>) : BaseAdapter() {
     override fun getCount(): Int = categories.size
     override fun getItem(position: Int): Any = categories[position]
-    override fun getItemId(position: Int): Long = categories[position].id.toLong()
+    override fun getItemId(position: Int): Long = categories[position].categoryId.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_species_category, parent, false)
@@ -21,7 +21,8 @@ class SpeciesCategoryAdapter(private val context: Context, private val categorie
         val imageView = view.findViewById<ImageView>(R.id.categoryImage)
         val textView = view.findViewById<TextView>(R.id.categoryName)
 
-        textView.text = category.name
+        textView.text = category.categoryName ?: "Unknown"
+
         Glide.with(context).load(category.imageUrl).placeholder(R.drawable.image_placeholder).into(imageView)
 
         return view
