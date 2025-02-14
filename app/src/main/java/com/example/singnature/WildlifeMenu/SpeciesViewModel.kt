@@ -16,11 +16,9 @@ class SpeciesViewModel : ViewModel() {
     private val _speciesDetail = MutableLiveData<Species?>()
     val speciesDetail: LiveData<Species?> get() = _speciesDetail
 
-    // This method fetches species based on the category name
     fun fetchSpeciesByCategory(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // Fetch species from API by category Id
                 val speciesResponse = speciesApiService.getSpeciesByCategory(categoryId).execute()
 
                 if (speciesResponse.isSuccessful) {
@@ -35,7 +33,6 @@ class SpeciesViewModel : ViewModel() {
         }
     }
 
-    // Method to fetch species details by ID
     fun fetchSpeciesDetail(specieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
