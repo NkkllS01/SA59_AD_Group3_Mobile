@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,8 +9,7 @@
     <ImageView
         android:id="@+id/categoryImage"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_height="120dp"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:src="@drawable/image_placeholder"
@@ -18,8 +18,7 @@
     <TextView
         android:id="@+id/categoryName"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:text="Category"
         android:textSize="18sp"
         android:textStyle="bold"
