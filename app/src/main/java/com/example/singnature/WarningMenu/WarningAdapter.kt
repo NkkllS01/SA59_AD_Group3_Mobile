@@ -1,6 +1,7 @@
 package com.example.singnature.WarningMenu
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,10 @@ import com.example.singnature.WildlifeMenu.Sightings
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.text.SpannableString
+import android.text.style.StyleSpan
+import android.graphics.Typeface
+import android.text.style.ForegroundColorSpan
 
 class WarningAdapter(
     private val context: Context,
@@ -49,6 +54,9 @@ class WarningAdapter(
             "DENGUE" -> {
                 // If the source is "DENGUE", use tier (alertLevel)
                 viewHolder.speciesOrTierTextView.text = "Tier: ${warning.alertLevel ?: "N/A"}"
+                val cluster = warning.cluster?: "Unknown location"
+                val dengueMessage = "There are dengue cases at $cluster. Please take precautions."
+                viewHolder.speciesOrTierTextView.append("\n$dengueMessage")
             }
             "SIGHTING" -> {
                 // If the source is "SIGHTING", check if the specieName is cached or make the API call
@@ -67,12 +75,18 @@ class WarningAdapter(
                         override fun onResponse(call: Call<Sightings>, response: Response<Sightings>) {
                             if (response.isSuccessful) {
                                 val sighting = response.body()
-                                val speciesName = sighting?.specieName ?: "Unknown"
+                                val specieName = sighting?.specieName ?: "Unknown"
+                                val details = sighting?.details?: "No details available"
 
                                 // Cache the result
-                                specieNameCache[sightingId] = speciesName
-                                // Update the TextView with the fetched specieName
-                                viewHolder.speciesOrTierTextView.text = "Specie: $speciesName"
+                                specieNameCache[sightingId] = specieName
+
+                                val spannable = SpannableString("Specie:$specieName\nDetails:$details")
+                                // Remove bold from details (if any)
+                                spannable.setSpan(StyleSpan(Typeface.NORMAL), "Specie: $specieName".length, spannable.length, 0)
+
+                                // Set the TextView with the styled text
+                                viewHolder.speciesOrTierTextView.text = spannable
                             } else {
                                 // If the API call fails, show default text
                                 viewHolder.speciesOrTierTextView.text = "Specie: Unknown"
