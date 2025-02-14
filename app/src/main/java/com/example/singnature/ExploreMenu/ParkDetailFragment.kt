@@ -46,9 +46,9 @@ class ParkDetailFragment : Fragment() {
             descriptionTextView.text = park.parkDescription
             openingHoursTextView.text = park.openingHours
 
-            // 加载图片
+            
             Glide.with(this)
-                .load(park.imageUrl) // 这里是你的图片 URL
+                .load(park.imageUrl)
                 .into(parkImageView)
         }
     }
