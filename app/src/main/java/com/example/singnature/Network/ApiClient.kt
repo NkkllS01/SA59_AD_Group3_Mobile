@@ -70,6 +70,7 @@ object ApiClient {
     val categoryApi: CategoryApiService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .client(getUnsafeOkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(CategoryApiService::class.java)
