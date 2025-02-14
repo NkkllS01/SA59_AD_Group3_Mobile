@@ -13,7 +13,8 @@ import com.example.singnature.R
 
 class SightingsSearchResultsAdapter (
     private val context: Context,
-    private val data: List<Sightings>
+    private val data: List<Sightings>,
+    private val onItemClick: (Sightings) -> Unit
 ) : BaseAdapter() {
 
     override fun getCount(): Int = data.size
@@ -43,6 +44,11 @@ class SightingsSearchResultsAdapter (
         } else {
             Log.d("SightingsAdapter", "Using placeholder for Sighting ID: ${item.sightingId}")
             imageView.setImageResource(R.drawable.image_placeholder)
+        }
+
+        view.setOnClickListener {
+            Log.d("SightingsAdapter", "Item clicked: ${item.sightingId}")
+            onItemClick(item)
         }
 
         return view
