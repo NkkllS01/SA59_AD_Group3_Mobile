@@ -10,46 +10,52 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingEnd="8dp">
 
         <TextView
             android:id="@+id/parkName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Park Name"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
         <!-- Region & Type in a Horizontal Layout -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="4dp">
 
             <TextView
                 android:id="@+id/parkRegion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Region"
-                android:textColor="#666666"
-                android:textSize="14sp" />
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
+
+
                 android:text=" | "
-                android:textColor="#666666"
-                android:textSize="14sp" />
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/parkType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Type"
-                android:textColor="#666666"
-                android:textSize="14sp" />
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
 
 
         </LinearLayout>
@@ -58,8 +64,8 @@
     <!-- Navigation Icon -->
     <ImageView
         android:id="@+id/navigationIcon"
-        android:layout_width="58dp"
-        android:layout_height="62dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="end"
         android:layout_marginTop="8dp"
         android:clickable="true"

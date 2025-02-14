@@ -6,22 +6,22 @@
     android:padding="16dp">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Species Category"
-        android:textSize="30sp"
-        android:textStyle="bold"
         android:layout_gravity="center"
-        android:textColor="@android:color/white"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/bg_header"
-        android:layout_marginBottom="16dp" />
+        android:text="Species Category"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <GridView
         android:id="@+id/categoryGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:numColumns="2"
-        android:verticalSpacing="20dp"
         android:horizontalSpacing="20dp"
-        android:padding="8dp" />
+        android:numColumns="2"
+        android:padding="8dp"
+        android:verticalSpacing="20dp" />
 </LinearLayout>

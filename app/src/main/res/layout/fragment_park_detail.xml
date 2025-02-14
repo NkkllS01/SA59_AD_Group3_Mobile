@@ -2,7 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="?android:attr/selectableItemBackground">
 
 
     <TextView
@@ -12,16 +13,18 @@
         android:text="Park Name"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="@color/green_light"
         android:layout_gravity="center"
         android:paddingTop="8dp" />
+
 
     <ImageView
         android:id="@+id/parkImage"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/image_placeholder" />
-
+        android:src="@drawable/image_placeholder"
+        android:background="?android:attr/selectableItemBackground"/>
     <TextView
         android:id="@+id/openingHours"
         android:layout_width="wrap_content"
