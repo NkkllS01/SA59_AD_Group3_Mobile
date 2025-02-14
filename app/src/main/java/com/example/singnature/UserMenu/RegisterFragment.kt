@@ -69,7 +69,7 @@ class RegisterFragment : Fragment() {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 if (response.isSuccessful && response.body() != null) {
                     val user = response.body()!!
-                    showToast("注册成功")
+                    showToast("register successful")
 
                     // 保存用户登录信息
                     saveLoginDetails(
