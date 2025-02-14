@@ -45,7 +45,6 @@ class WarningViewModel : ViewModel() {
     fun fetchWarningDetail(warningId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // Execute the synchronous request
                 val warningResponse = warningApiService.getWarningById(warningId).execute()
 
                 if (warningResponse.isSuccessful) {
