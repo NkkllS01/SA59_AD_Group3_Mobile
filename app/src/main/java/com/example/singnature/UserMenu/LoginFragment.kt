@@ -82,7 +82,13 @@ class LoginFragment : Fragment() {
                             newsletter = it.newsletter
                         )
                         showToast("Login successful")
-                        Navigation.findNavController(requireView()).navigate(R.id.userFragment)
+                        val shouldReturnToReportSighting = sharedPref.getBoolean("returnToReportSighting", false)
+                        if (shouldReturnToReportSighting) {
+                            sharedPref.edit().remove("returnToReportSighting").apply()
+                            Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_reportSightingFragment)
+                        } else {
+                            Navigation.findNavController(requireView()).navigate(R.id.userFragment)
+                        }
                     }
                 } else {
                     showToast("Invalid username or password")
