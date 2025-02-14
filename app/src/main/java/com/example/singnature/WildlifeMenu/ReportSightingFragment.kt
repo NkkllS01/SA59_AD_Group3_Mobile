@@ -52,13 +52,18 @@ class ReportSightingFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentReportSightingBinding? = null
     private val binding get() = _binding!!
 
+    private var userLocation: LatLng? = null
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var selectedLocation: LatLng? = null
-    private val PICK_IMAGE_REQUEST = 1
-    private val CAPTURE_IMAGE_REQUEST = 2
-    private var userLocation: LatLng? = null
     private var imageUri: Uri? = null
+    private var photoFile: File? = null
+
+    companion object {
+        private const val PICK_IMAGE_REQUEST = 1
+        private const val CAPTURE_IMAGE_REQUEST = 2
+        private const val STORAGE_PERMISSION_CODE = 1001
+    }
 
     private val speciesList = arrayOf(
         "Select Species Name",
@@ -144,7 +149,7 @@ class ReportSightingFragment : Fragment(), OnMapReadyCallback {
             "Collared Earthstar" -> 9
             else -> -1
         }
-        val file = imageUri?.let { getFileFromUri(it) }
+        val file = imageUri?.let { copyFileToCache(it) }
         if(file == null){
             Toast.makeText(requireContext(), "Image file not found", Toast.LENGTH_SHORT).show()
             return
@@ -190,21 +195,22 @@ class ReportSightingFragment : Fragment(), OnMapReadyCallback {
 
           override fun onFailure(call: Call<Sightings>, t: Throwable) {
               Toast.makeText(requireContext(),"Sighting submission failed: ${t.message} ",Toast.LENGTH_SHORT).show()
+              Log.e("Submission falied","ERROR: ${t.message}")
           }
       })
     }
-    private fun getFileFromUri(uri: Uri): File? {
-        val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = requireActivity().contentResolver.query(uri, filePathColumn, null, null, null)
-        cursor?.use {
-            if (it.moveToFirst()) {
-                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                val filePath = it.getString(columnIndex)
-                return File(filePath)
+
+    private fun copyFileToCache(uri: Uri): File {
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        val file = File(requireContext().cacheDir, "temp_image.jpg")
+        inputStream?.use { input ->
+            file.outputStream().use { output ->
+                input.copyTo(output)
             }
         }
-        return null
+        return file
     }
+
     private fun showImageSourceDialog() {
         val options = arrayOf("Choose from Gallery", "Take Photo", "Cancel")
         val builder = AlertDialog.Builder(requireContext())
