@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:color="@android:color/white"/> <!-- 选中状态：白色 -->
+    <item android:state_pressed="true" android:color="@color/green_mid"/> <!-- 按下时变色 -->
+    <item android:color="@color/green_light"/> <!-- 默认未选中时 -->
+</selector>

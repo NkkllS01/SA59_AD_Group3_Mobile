@@ -7,13 +7,15 @@
 
     <TextView
         android:id="@+id/titleTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="210dp"
         android:layout_height="wrap_content"
-        android:text="Sighting Details"
         android:layout_gravity="center_horizontal"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_header"
+        android:text="Sighting Details"
+        android:textColor="@android:color/white"
+        android:textSize="23sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +29,8 @@
             android:layout_height="150dp"
             android:layout_weight="1"
             android:scaleType="centerCrop"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/image_placeholder"/>
 
         <fragment
             android:id="@+id/map"
@@ -42,7 +45,9 @@
         android:id="@+id/button_upload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Upload Image" />
+        android:text="Upload Image"
+        android:textColor="@android:color/white"
+        android:background="@drawable/button_ripple"/>
 
     <TextView
         android:id="@+id/speciesTextView"
@@ -55,8 +60,8 @@
     <Spinner
         android:id="@+id/sighting_type_spinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"/>
+        android:layout_height="42dp"
+        android:layout_marginBottom="16dp" />
 
     <TextView
         android:id="@+id/detailsTextView"
@@ -82,7 +87,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:layout_marginTop="16dp"/>
+        android:background="@drawable/button_ripple"
+        android:layout_marginTop="1dp"/>
 
     <TextView
         android:id="@+id/errorTextView"
