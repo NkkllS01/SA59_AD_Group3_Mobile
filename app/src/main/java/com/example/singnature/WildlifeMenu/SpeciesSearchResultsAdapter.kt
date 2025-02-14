@@ -43,8 +43,13 @@ class SpeciesSearchResultsAdapter (
                 .error(R.drawable.image_placeholder)
                 .into(imageView)
         } else {
-            Log.d("SpeciesAdapter", "Using placeholder for Sighting ID: ${item.specieId}")
+            Log.d("SpeciesAdapter", "Using placeholder for Specie ID: ${item.specieId}")
             imageView.setImageResource(R.drawable.image_placeholder)
+        }
+
+        view.setOnClickListener {
+            Log.d("SpeciesAdapter", "Item clicked: ${item.specieId}")
+            onItemClick(item)
         }
 
         return view

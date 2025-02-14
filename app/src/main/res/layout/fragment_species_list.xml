@@ -6,11 +6,13 @@
 
     <TextView
         android:id="@+id/categoryTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Species List"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:background="@drawable/bg_header" />
 
     <ListView
         android:id="@+id/speciesListView"
