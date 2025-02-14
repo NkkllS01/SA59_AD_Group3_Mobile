@@ -29,10 +29,8 @@ class WarningListFragment : Fragment(), OnWarningClickListener {
 
         warningListView = view.findViewById(R.id.warningListView)
 
-        // Fetch warnings from ViewModel
         warningViewModel.getAllWarnings()
 
-        // Observe warning list changes
         warningViewModel.warningList.observe(viewLifecycleOwner) { warningList ->
             if (warningList.isNotEmpty()) {
                 // Set up the adapter with the listener
