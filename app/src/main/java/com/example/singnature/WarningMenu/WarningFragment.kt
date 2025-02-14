@@ -17,7 +17,6 @@ class WarningFragment : Fragment() {
 
         val action = WarningFragmentDirections.actionWarningFragmentToWarningListFragment()
         findNavController().navigate(action)
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_warning, container, false)
     }
 }

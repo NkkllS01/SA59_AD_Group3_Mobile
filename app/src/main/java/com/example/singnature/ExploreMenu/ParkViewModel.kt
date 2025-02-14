@@ -21,7 +21,6 @@ class ParkViewModel : ViewModel() {
     fun getAllParks() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // Use enqueue for asynchronous request
                 parkApiService.getAllParks().enqueue(object : Callback<List<Park>> {
                     override fun onResponse(call: Call<List<Park>>, response: Response<List<Park>>) {
                         if (response.isSuccessful) {
@@ -46,7 +45,6 @@ class ParkViewModel : ViewModel() {
     fun fetchParkDetail(parkId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // Execute the synchronous request
                 val parkResponse = parkApiService.getParkById(parkId).execute()
 
                 if (parkResponse.isSuccessful) {

@@ -46,6 +46,7 @@ class SearchResultsFragment : Fragment() {
             if (speciesList.isNotEmpty()) {
                 speciesHeader.visibility = View.VISIBLE
                 speciesListView.visibility = View.VISIBLE
+
                 speciesListView.adapter = SpeciesSearchResultsAdapter(requireContext(), speciesList) { selectedSpecies ->
                     val action = SearchResultsFragmentDirections
                         .actionSearchResultsFragmentToSpeciesDetailFragment(selectedSpecies.specieId)
@@ -63,11 +64,10 @@ class SearchResultsFragment : Fragment() {
             if (sightingsList.isNotEmpty()) {
                 sightingsHeader.visibility = View.VISIBLE
                 sightingsListView.visibility = View.VISIBLE
-                sightingsListView.adapter = SightingsSearchResultsAdapter(requireContext(), sightingsList)
 
-                sightingsListView.setOnItemClickListener(){_,_,position,_->
-                    val sighting =sightingsList[position]
-                    val action = SearchResultsFragmentDirections.actionSearchResultFragmentToSightingFragment(sightingId = sighting.sightingId)
+                sightingsListView.adapter = SightingsSearchResultsAdapter(requireContext(), sightingsList) { selectedSighting ->
+                    val action = SearchResultsFragmentDirections
+                        .actionSearchResultFragmentToSightingFragment(sightingId = selectedSighting.sightingId)
                     findNavController().navigate(action)
                 }
                 println("DEBUG: Updated sightings list size: ${sightingsList.size}")

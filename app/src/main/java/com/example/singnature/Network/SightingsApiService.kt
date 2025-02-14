@@ -2,11 +2,13 @@ package com.example.singnature.Network
 
 import retrofit2.Call
 import com.example.singnature.WildlifeMenu.Sightings
-import retrofit2.http.Body
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface SightingsApiService {
     @GET("sightings")
@@ -18,8 +20,11 @@ interface SightingsApiService {
     @GET("sightings/{id}")
     fun getSightingById(@Path("id") id: Int): Call<Sightings>
 
+    @Multipart
     @POST("sightings")
-    fun createSighting(@Body sighting: Sightings):Call<Sightings>
+    fun createSighting(@Part("sighting") sighting: RequestBody,
+    @Part file: MultipartBody.Part
+    ):Call<Sightings>
 }
 
 val sightingsApiService: SightingsApiService = ApiClient.instance.create(SightingsApiService::class.java)
