@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,9 +24,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferNetworkLossHandler
+import com.example.singnature.BuildConfig
 import com.example.singnature.Network.sightingsApiService
 import com.example.singnature.R
 import com.example.singnature.databinding.FragmentReportSightingBinding
@@ -190,6 +193,7 @@ class ReportSightingFragment : Fragment(), OnMapReadyCallback {
 
           override fun onFailure(call: Call<Sightings>, t: Throwable) {
               Toast.makeText(requireContext(),"Sighting submission failed: ${t.message} ",Toast.LENGTH_SHORT).show()
+              Log.e("Submission falied","ERROR: ${t.message}",t)
           }
       })
     }
@@ -227,7 +231,18 @@ class ReportSightingFragment : Fragment(), OnMapReadyCallback {
 
     private fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, CAPTURE_IMAGE_REQUEST)
+        val imageFile = createImageFile()
+        imageFile?.let{
+            imageUri = FileProvider.getUriForFile(requireContext(),"${BuildConfig.APPLICATION_ID}.fileprovider",it)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri)
+            startActivityForResult(intent, CAPTURE_IMAGE_REQUEST)
+        }
+    }
+
+    private fun createImageFile():File?{
+        val timestamp = System.currentTimeMillis()
+        val storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile("JPEG_${timestamp}_",".jpg",storageDir)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -239,8 +254,7 @@ class ReportSightingFragment : Fragment(), OnMapReadyCallback {
                     binding.sightingImageView.setImageURI(imageUri)
                 }
                 CAPTURE_IMAGE_REQUEST -> {
-                    val bitmap = data?.extras?.get("data") as Bitmap
-                    binding.sightingImageView.setImageBitmap(bitmap)
+                    binding.sightingImageView.setImageURI(imageUri)
                 }
             }
         } else {
