@@ -47,6 +47,7 @@ import retrofit2.Response
 import java.io.File
 import java.util.Date
 
+
 class ReportSightingFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentReportSightingBinding? = null
@@ -94,6 +95,8 @@ class ReportSightingFragment : Fragment(), OnMapReadyCallback {
         } else {
             val userName = sharedPreferences.getString("username", "").toString()
         }
+
+
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -194,15 +197,33 @@ class ReportSightingFragment : Fragment(), OnMapReadyCallback {
       })
     }
     private fun getFileFromUri(uri: Uri): File? {
-        val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = requireActivity().contentResolver.query(uri, filePathColumn, null, null, null)
-        cursor?.use {
-            if (it.moveToFirst()) {
-                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                val filePath = it.getString(columnIndex)
-                return File(filePath)
+
+        if (uri.scheme == "content") {
+            try {
+                // 创建临时文件
+                val timestamp = System.currentTimeMillis()
+                val storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                val tempFile = File.createTempFile("TEMP_${timestamp}_", ".jpg", storageDir)
+
+
+                requireActivity().contentResolver.openInputStream(uri)?.use { input ->
+                    tempFile.outputStream().use { output ->
+                        input.copyTo(output)
+                    }
+                }
+
+                return tempFile
+            } catch (e: Exception) {
+                Log.e("FileUtils", "wrong: ${e.message}", e)
+                Toast.makeText(requireContext(), "wrong", Toast.LENGTH_SHORT).show()
+                return null
             }
         }
+
+        else if (uri.scheme == "file") {
+            return File(uri.path ?: return null)
+        }
+
         return null
     }
     private fun showImageSourceDialog() {
