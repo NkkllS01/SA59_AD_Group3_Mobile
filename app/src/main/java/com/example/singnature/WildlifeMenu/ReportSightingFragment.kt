@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -46,6 +47,7 @@ import retrofit2.Call
 import retrofit2.Response
 import java.io.File
 import java.util.Date
+
 
 class ReportSightingFragment : Fragment(), OnMapReadyCallback {
 
@@ -99,6 +101,8 @@ class ReportSightingFragment : Fragment(), OnMapReadyCallback {
         } else {
             val userName = sharedPreferences.getString("username", "").toString()
         }
+
+
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -200,15 +204,35 @@ class ReportSightingFragment : Fragment(), OnMapReadyCallback {
       })
     }
 
-    private fun copyFileToCache(uri: Uri): File {
-        val inputStream = requireContext().contentResolver.openInputStream(uri)
-        val file = File(requireContext().cacheDir, "temp_image.jpg")
-        inputStream?.use { input ->
-            file.outputStream().use { output ->
-                input.copyTo(output)
+    private fun getFileFromUri(uri: Uri): File? {
+
+        if (uri.scheme == "content") {
+            try {
+                // 创建临时文件
+                val timestamp = System.currentTimeMillis()
+                val storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                val tempFile = File.createTempFile("TEMP_${timestamp}_", ".jpg", storageDir)
+
+
+                requireActivity().contentResolver.openInputStream(uri)?.use { input ->
+                    tempFile.outputStream().use { output ->
+                        input.copyTo(output)
+                    }
+                }
+
+                return tempFile
+            } catch (e: Exception) {
+                Log.e("FileUtils", "wrong: ${e.message}", e)
+                Toast.makeText(requireContext(), "wrong", Toast.LENGTH_SHORT).show()
+                return null
             }
         }
-        return file
+
+        else if (uri.scheme == "file") {
+            return File(uri.path ?: return null)
+        }
+
+        return null
     }
 
     private fun showImageSourceDialog() {

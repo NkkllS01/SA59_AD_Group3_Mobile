@@ -24,19 +24,19 @@
 
         <TextView
             android:id="@+id/sightingTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="203dp"
             android:layout_height="wrap_content"
-            android:textSize="28sp"
-            android:textStyle="bold"
+            android:layout_marginTop="10dp"
             android:text="Sighting Title"
-            android:layout_marginTop="10dp"/>
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/sightingUser"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="Reported by: User" />
+            android:text="Reported by: User"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/viewDetails"

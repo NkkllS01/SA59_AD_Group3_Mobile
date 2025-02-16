@@ -12,6 +12,10 @@
         android:text="Warning Fragment"
         android:textColor="@color/black"
         android:textSize="30sp"
+        android:layout_gravity="top"
+        android:elevation="4dp"
+        android:translationZ="8dp"
+        android:padding="12dp"
         android:gravity="center" />
 
 </FrameLayout>
